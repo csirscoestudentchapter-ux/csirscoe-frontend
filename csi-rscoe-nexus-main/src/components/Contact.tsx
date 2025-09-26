@@ -26,19 +26,40 @@ const Contact: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // submission
-    setTimeout(() => {
+    try {
+      const response = await fetch("http://localhost:8080/api/public/contactus", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          msg: formData.message 
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.text();
+        toast({
+          title: "Message Sent!",
+          description: result,
+        });
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        toast({
+          title: "Failed to send",
+          description: "Server error or invalid data",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
       toast({
-        title: "Message Sent!",
-        description: "Thank you for reaching out. We'll get back to you soon."
+        title: "Error",
+        description: "Could not connect to backend",
+        variant: "destructive",
       });
-      setFormData({
-        name: '',
-        email: '',
-        message: ''
-      });
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({

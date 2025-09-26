@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button';
 
 interface NavigationProps {
   onLoginClick: () => void;
+  user?: any;
+  onLogout?: () => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ onLoginClick }) => {
+const Navigation: React.FC<NavigationProps> = ({ onLoginClick, user, onLogout }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -56,7 +58,7 @@ const Navigation: React.FC<NavigationProps> = ({ onLoginClick }) => {
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
           >
             <img
-              src="/lovable-uploads/e98759b5-602f-4fb5-ae20-b08305109a34.png"
+              src="/uploads/csi.png"
               alt="CSI RSCOE Logo"
               className="h-10 w-10 lg:h-12 lg:w-12"
             />
@@ -82,15 +84,39 @@ const Navigation: React.FC<NavigationProps> = ({ onLoginClick }) => {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
               </motion.button>
             ))}
-            <Button
-              onClick={onLoginClick}
-              variant="outline"
-              size="sm"
-              className="border-primary text-primary hover:gradient-primary hover:text-primary-foreground"
-            >
-              <LogIn className="w-4 h-4 mr-2" />
-              Login
-            </Button>
+            {user ? (
+              user.role === 'ADMIN' ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-sm text-gray-600">Welcome, {user.name}</span>
+                <Button
+                  onClick={() => window.location.href = '/dashboard'}
+                  variant="default"
+                  size="sm"
+                  className="gradient-primary"
+                >
+                  Dashboard
+                </Button>
+                <Button
+                  onClick={onLogout}
+                  variant="outline"
+                  size="sm"
+                  className="border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                >
+                  Logout
+                </Button>
+              </div>
+              ) : null
+            ) : (
+              <Button
+                onClick={onLoginClick}
+                variant="outline"
+                size="sm"
+                className="border-primary text-primary hover:gradient-primary hover:text-primary-foreground"
+              >
+                <LogIn className="w-4 h-4 mr-2" />
+                Login
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -124,15 +150,39 @@ const Navigation: React.FC<NavigationProps> = ({ onLoginClick }) => {
                   {item.name}
                 </motion.button>
               ))}
-              <Button
-                onClick={onLoginClick}
-                variant="outline"
-                size="sm"
-                className="w-full border-primary text-primary hover:gradient-primary hover:text-primary-foreground"
-              >
-                <LogIn className="w-4 h-4 mr-2" />
-                Login
-              </Button>
+              {user ? (
+                user.role === 'ADMIN' ? (
+                <div className="space-y-2">
+                  <span className="block text-sm text-gray-600">Welcome, {user.name}</span>
+                  <Button
+                    onClick={() => window.location.href = '/dashboard'}
+                    variant="default"
+                    size="sm"
+                    className="w-full gradient-primary"
+                  >
+                    Dashboard
+                  </Button>
+                  <Button
+                    onClick={onLogout}
+                    variant="outline"
+                    size="sm"
+                    className="w-full border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                  >
+                    Logout
+                  </Button>
+                </div>
+                ) : null
+              ) : (
+                <Button
+                  onClick={onLoginClick}
+                  variant="outline"
+                  size="sm"
+                  className="w-full border-primary text-primary hover:gradient-primary hover:text-primary-foreground"
+                >
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Login
+                </Button>
+              )}
             </div>
           </motion.div>
         )}

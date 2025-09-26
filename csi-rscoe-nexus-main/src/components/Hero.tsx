@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { HeroButton } from '@/components/ui/hero-button';
 import { ArrowDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 const Hero: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const {
@@ -92,28 +93,15 @@ const Hero: React.FC = () => {
           delay: 0.2
         }} className="mb-8">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-playfair font-bold text-foreground mb-6 leading-tight">
-              Empowering Future{' '}
+              Driven by students,{'  '}<br></br>
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Tech Leaders
+                {' '}Powered by ideas.
               </span>
             </h1>
-            <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8">Join a vibrant student chapter where learning meets opportunity. We connect students with industry experts, hands-on experiences, and a strong technical community.</p>
+            <p className="text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8">A vibrant space for curious minds, bold thinkers, and passionate doers. At CSI RSCOE, students lead the way and ideas light the path forward.</p>
           </motion.div>
 
-          <motion.div initial={{
-          opacity: 0,
-          y: 30
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          duration: 1,
-          delay: 0.6
-        }} className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            
-            
-            
-          </motion.div>
+          
 
           {/* Scroll indicator */}
           <motion.div initial={{

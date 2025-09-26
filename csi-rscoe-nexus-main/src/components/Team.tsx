@@ -10,20 +10,20 @@ const Team: React.FC = () => {
     once: true,
     amount: 0.2
   });
- const teamMembers = [{
+  const teamMembers = [{
     id: 1,
     name: "Kshitij Thorat",
     role: "President",
     image: "/uploads/kshitij.jpg",
     linkedin: "https://www.linkedin.com/in/kshitij-thorat-15july2005",
-    email: "priya.sharma@student.rscoe.edu"
+    email: "kshiitjthorat15@gmail.com"
   }, {
     id: 2,
-    name: "Manasi Chaudhary",
+    name: "Manasi Chaudhari",
     role: "Vice President",
     image: "/uploads/mansi.jpg",
     linkedin: "https://www.linkedin.com/in/mansiy-c-62a6b2259",
-    email: "arjun.patel@student.rscoe.edu"
+    email: "manasic864@gmail.com"
   }, {
     id: 3,
     name: "Shivtej Rakhunde",
@@ -37,7 +37,7 @@ const Team: React.FC = () => {
     role: "Secretary",
     image: "/uploads/shweta.jpg",
     linkedin: "https://www.linkedin.com/in/shweta-tate-a54712256",
-    email: "karthik.kumar@student.rscoe.edu"
+    email: "shwetatate30@gmail.com"
   }, {
     id: 5,
     name: "Mayur Bhavsar",
@@ -51,52 +51,29 @@ const Team: React.FC = () => {
     role: "Event Management Lead",
     image: "/uploads/mogre.jpg",
     linkedin: "https://www.linkedin.com/in/amey-mogre-517a49291",
-    email: "rohit.mehta@student.rscoe.edu"
+    email: "ameymogrepune@gmail.com"
   }, {
     id: 7,
     name: "Disha Kulkarni",
     role: "Design Lead",
     image: "/uploads/disha.jpg",
     linkedin: "https://www.linkedin.com/in/disha-kulkarni-profile",
-    email: "kavya.nair@student.rscoe.edu"
+    email: "dishakulkarni1912@gmail.com"
   }, {
     id: 8,
     name: "Manasvi Ghotkar",
     role: "Documentation Lead",
     image: "/uploads/manasvi.jpg",
     linkedin: "https://www.linkedin.com/in/manasvi-ghotkar-a39822257",
-    email: "vikram.joshi@student.rscoe.edu"
+    email: "manasvighotkar99@gmail.com"
   }, {
     id: 9,
     name: "Prajakta Nalawade",
     role: "Social Media Lead",
     image: "/uploads/prajakta.jpg",
     linkedin: "https://www.linkedin.com/in/prajakta-nalawade",
-    email: "isha.gupta@student.rscoe.edu"
-  }
-   // {
-  //   id: 10,
-  //   name: "Aditya Raj",
-  //   role: "Web Developer",
-  //   image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-  //   linkedin: "https://linkedin.com/in/adityaraj",
-  //   email: "aditya.raj@student.rscoe.edu"
-  // }, {
-  //   id: 11,
-  //   name: "Pooja Iyer",
-  //   role: "Design Lead",
-  //   image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-  //   linkedin: "https://linkedin.com/in/poojaiyer",
-  //   email: "pooja.iyer@student.rscoe.edu"
-  // }, {
-  //   id: 12,
-  //   name: "Rahul Verma",
-  //   role: "Operations Manager",
-  //   image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-  //   linkedin: "https://linkedin.com/in/rahulverma",
-  //   email: "rahul.verma@student.rscoe.edu"
-  // }
-  ];
+    email: "nalawadeprajakta00@gmail.com"
+  }];
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const scrollAmount = 320; // Width of card + gap
@@ -168,7 +145,12 @@ const Team: React.FC = () => {
                 <CardContent className="p-6">
                   <div className="text-center">
                     <div className="relative mb-4 mx-auto w-24 h-24">
-                      <img src={member.image} alt={member.name} className="w-full h-full object-cover rounded-full border-4 border-primary/20 group-hover:border-primary/40 transition-all duration-300" />
+                      <img
+                        src={member.image.startsWith('http') ? member.image : (member.image.startsWith('/') ? member.image : `/${member.image}`)}
+                        alt={member.name}
+                        className="w-full h-full object-cover rounded-full border-4 border-primary/20 group-hover:border-primary/40 transition-all duration-300"
+                        onError={(e)=>{ (e.currentTarget as HTMLImageElement).src = '/placeholder.svg'; }}
+                      />
                       <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
                     
