@@ -157,7 +157,7 @@ const BlogDetails: React.FC = () => {
   useEffect(() => {
     (async () => {
       try {
-      const res = await fetch('http://localhost:8080/api/public/blogs');
+      const res = await fetch('https://csi-backend-4.onrender.com/api/public/blogs');
       if (res.ok) {
         const list = await res.json();
           const foundBlog = list.find((b: any) => String(b.id) === id);

@@ -6,7 +6,7 @@ const EventDetails: React.FC = () => {
   const [event, setEvent] = useState<any | null>(null);
   useEffect(() => {
     (async () => {
-      const res = await fetch('http://localhost:8080/api/public/events');
+      const res = await fetch('https://csi-backend-4.onrender.com/api/public/events');
       if (res.ok) {
         const list = await res.json();
         setEvent(list.find((e: any) => String(e.id) === id));

@@ -16,7 +16,7 @@ const Announcements: React.FC = () => {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/public/announcements");
+        const res = await fetch("https://csi-backend-4.onrender.com/api/public/announcements");
         const data = await res.json();
         setAnnouncements(data.reverse()); // latest first
       } catch (err) {

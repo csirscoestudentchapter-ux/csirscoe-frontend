@@ -168,7 +168,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
   const fetchUsers = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/admin/users");
+      const response = await fetch("https://csi-backend-4.onrender.com/api/admin/users");
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
@@ -184,7 +184,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
   const fetchAnnouncements = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/Admin/Announcements");
+      const response = await fetch("https://csi-backend-4.onrender.com/api/Admin/Announcements");
       if (response.ok) {
         const data = await response.json();
         setAnnouncements(data);
@@ -200,9 +200,9 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
   const fetchEvents = useCallback(async () => {
     try {
-      let url = "http://localhost:8080/api/admin/events";
-      if (eventFilter === 'upcoming') url = "http://localhost:8080/api/admin/events/upcoming";
-      if (eventFilter === 'completed') url = "http://localhost:8080/api/admin/events/completed";
+      let url = "https://csi-backend-4.onrender.com/api/admin/events";
+      if (eventFilter === 'upcoming') url = "https://csi-backend-4.onrender.com/api/admin/events/upcoming";
+      if (eventFilter === 'completed') url = "https://csi-backend-4.onrender.com/api/admin/events/completed";
       const response = await fetch(url);
       if (response.ok) {
         const data: EventWithCount[] = await response.json();
@@ -210,7 +210,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
         const counts = await Promise.all(
           data.map(async (e) => {
             try {
-              const r = await fetch(`http://localhost:8080/api/admin/events/${e.id}/registrations/count`);
+              const r = await fetch(`https://csi-backend-4.onrender.com/api/admin/events/${e.id}/registrations/count`);
               if (r.ok) { const n = await r.text(); return parseInt(n || '0', 10) || 0; }
             } catch {}
             return 0;
@@ -249,7 +249,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
   const fetchBlogs = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/admin/blogs");
+      const response = await fetch("https://csi-backend-4.onrender.com/api/admin/blogs");
       if (response.ok) {
         const data = await response.json();
         setBlogs(data);
@@ -290,7 +290,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
     setShowRegistrationsModal(true);
     setRegistrationsLoading(true);
     try {
-      const res = await fetch(`http://localhost:8080/api/admin/events/${ev.id}/registrations`);
+      const res = await fetch(`https://csi-backend-4.onrender.com/api/admin/events/${ev.id}/registrations`);
       if (res.ok) {
         const data = await res.json();
         setRegistrations(data);
@@ -305,12 +305,12 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
   };
 
   const downloadRegistrationsCsv = (ev: Event) => {
-    window.open(`http://localhost:8080/api/admin/events/${ev.id}/registrations.csv`, '_blank');
+    window.open(`https://csi-backend-4.onrender.com/api/admin/events/${ev.id}/registrations.csv`, '_blank');
   };
 
   const fetchTeam = useCallback(async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/admin/team");
+      const response = await fetch("https://csi-backend-4.onrender.com/api/admin/team");
       if (response.ok) {
         const data = await response.json();
         setTeam(data);
@@ -326,8 +326,8 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
     setIsLoading(true);
     try {
       const url = editingUser 
-        ? `http://localhost:8080/api/admin/users/${editingUser.id}`
-        : "http://localhost:8080/api/admin/users";
+        ? `https://csi-backend-4.onrender.com/api/admin/users/${editingUser.id}`
+        : "https://csi-backend-4.onrender.com/api/admin/users";
       
       const method = editingUser ? "PUT" : "POST";
       
@@ -369,8 +369,8 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
     setIsLoading(true);
     try {
       const url = editingAnnouncement
-        ? `http://localhost:8080/api/Admin/Announcements/${editingAnnouncement.id}`
-        : "http://localhost:8080/api/Admin/Announcements";
+        ? `https://csi-backend-4.onrender.com/api/Admin/Announcements/${editingAnnouncement.id}`
+        : "https://csi-backend-4.onrender.com/api/Admin/Announcements";
       const method = editingAnnouncement ? "PUT" : "POST";
       const response = await fetch(url, {
         method,
@@ -405,7 +405,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
   const deleteAnnouncement = async (id: number) => {
     if (!confirm("Delete this announcement?")) return;
     try {
-      const res = await fetch(`http://localhost:8080/api/Admin/Announcements/${id}`, { method: 'DELETE' });
+      const res = await fetch(`https://csi-backend-4.onrender.com/api/Admin/Announcements/${id}`, { method: 'DELETE' });
       if (res.ok) {
         toast({ title: 'Success', description: 'Announcement deleted' });
         fetchAnnouncements();
@@ -424,8 +424,8 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
       // No image upload for events
       
       const url = editingEvent 
-        ? `http://localhost:8080/api/admin/events/${editingEvent.id}`
-        : `http://localhost:8080/api/admin/events`;
+        ? `https://csi-backend-4.onrender.com/api/admin/events/${editingEvent.id}`
+        : `https://csi-backend-4.onrender.com/api/admin/events`;
       const method = editingEvent ? "PUT" : "POST";
       const eventPayload = {
         ...eventForm,
@@ -473,8 +473,8 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
       }
       
       const url = editingBlog 
-        ? `http://localhost:8080/api/admin/blogs/${editingBlog.id}`
-        : `http://localhost:8080/api/admin/blogs`;
+        ? `https://csi-backend-4.onrender.com/api/admin/blogs/${editingBlog.id}`
+        : `https://csi-backend-4.onrender.com/api/admin/blogs`;
       const method = editingBlog ? "PUT" : "POST";
       const response = await fetch(url, {
         method,
@@ -506,7 +506,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
     const form = new FormData();
     form.append('file', file);
     try {
-      const res = await fetch('http://localhost:8080/api/upload', { method: 'POST', body: form });
+      const res = await fetch('https://csi-backend-4.onrender.com/api/upload', { method: 'POST', body: form });
       if (res.ok) {
         const data = await res.json();
         return data.url as string;
@@ -519,7 +519,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
     if (!confirm("Are you sure you want to delete this user?")) return;
     
     try {
-      const response = await fetch(`http://localhost:8080/api/admin/users/${userId}`, {
+      const response = await fetch(`https://csi-backend-4.onrender.com/api/admin/users/${userId}`, {
         method: "DELETE",
       });
 
@@ -547,7 +547,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
   const resetPassword = async (userId: number) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/admin/users/${userId}/reset-password`, {
+      const response = await fetch(`https://csi-backend-4.onrender.com/api/admin/users/${userId}/reset-password`, {
         method: "POST",
       });
 
@@ -574,7 +574,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
   const deleteEvent = async (eventId: number) => {
     if (!confirm("Are you sure you want to delete this event?")) return;
-    const res = await fetch(`http://localhost:8080/api/admin/events/${eventId}`, { method: 'DELETE' });
+    const res = await fetch(`https://csi-backend-4.onrender.com/api/admin/events/${eventId}`, { method: 'DELETE' });
     if (res.ok) {
       toast({ title: "Success", description: "Event deleted successfully" });
       fetchEvents();
@@ -585,7 +585,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
   const deleteBlog = async (blogId: number) => {
     if (!confirm("Are you sure you want to delete this blog?")) return;
-    const res = await fetch(`http://localhost:8080/api/admin/blogs/${blogId}`, { method: 'DELETE' });
+    const res = await fetch(`https://csi-backend-4.onrender.com/api/admin/blogs/${blogId}`, { method: 'DELETE' });
     if (res.ok) {
       toast({ title: "Success", description: "Blog deleted successfully" });
       fetchBlogs();
@@ -608,8 +608,8 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
       }
       
       const url = editingTeam 
-        ? `http://localhost:8080/api/admin/team/${editingTeam.id}`
-        : `http://localhost:8080/api/admin/team`;
+        ? `https://csi-backend-4.onrender.com/api/admin/team/${editingTeam.id}`
+        : `https://csi-backend-4.onrender.com/api/admin/team`;
       const method = editingTeam ? "PUT" : "POST";
       const response = await fetch(url, {
         method,
@@ -634,7 +634,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
   const deleteTeam = async (id: number) => {
     if (!confirm("Are you sure you want to delete this member?")) return;
-    const res = await fetch(`http://localhost:8080/api/admin/team/${id}`, { method: 'DELETE' });
+    const res = await fetch(`https://csi-backend-4.onrender.com/api/admin/team/${id}`, { method: 'DELETE' });
     if (res.ok) {
       toast({ title: "Success", description: "Member deleted" });
       fetchTeam();

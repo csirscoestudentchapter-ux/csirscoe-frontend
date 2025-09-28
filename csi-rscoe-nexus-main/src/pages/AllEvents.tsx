@@ -4,7 +4,7 @@ const AllEvents: React.FC = () => {
   const [events, setEvents] = useState<any[]>([]);
   useEffect(() => {
     (async () => {
-      const res = await fetch('http://localhost:8080/api/public/events');
+      const res = await fetch('https://csi-backend-4.onrender.com/api/public/events');
       if (res.ok) setEvents(await res.json());
     })();
   }, []);

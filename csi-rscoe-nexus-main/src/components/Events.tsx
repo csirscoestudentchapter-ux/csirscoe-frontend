@@ -5,6 +5,7 @@ import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { API_ENDPOINTS } from '@/config/api';
 
 const Events: React.FC = () => {
   const ref = useRef(null);
@@ -36,7 +37,7 @@ const Events: React.FC = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch('http://localhost:8080/api/public/events');
+        const res = await fetch(API_ENDPOINTS.EVENTS);
         if (res.ok) {
           const data = await res.json();
           setEvents(data);
@@ -50,7 +51,7 @@ const Events: React.FC = () => {
     const loadSchema = async () => {
       if (!registerFor) return;
       try {
-        const res = await fetch(`http://localhost:8080/api/admin/events/${registerFor.id}/registration-schema`);
+        const res = await fetch(API_ENDPOINTS.getEventRegistrationSchema(registerFor.id));
         if (res.ok) {
           const text = await res.text();
           const arr = text ? JSON.parse(text) : [];
@@ -285,7 +286,7 @@ const Events: React.FC = () => {
             <input className="p-2 border rounded bg-background text-foreground placeholder:text-muted-foreground border-input" placeholder="Team Name" value={form.teamName} onChange={e=>{ setForm({...form,teamName:e.target.value}); setTeamAvailable(null); }} onBlur={async ()=>{
               if (!registerFor || !form.teamName.trim()) return;
               try{
-                const res = await fetch(`http://localhost:8080/api/public/events/${registerFor.id}/team-available?teamName=${encodeURIComponent(form.teamName)}`);
+                const res = await fetch(API_ENDPOINTS.getEventTeamAvailable(registerFor.id, form.teamName));
                 if(res.ok){ const txt = await res.text(); setTeamAvailable(txt === 'true'); }
               }catch{}
             }} />
@@ -345,7 +346,7 @@ const Events: React.FC = () => {
                 customFields.forEach(f => { (customData as any)[f.label] = (form as any)[f.label] || ''; });
                 const payload = { ...form, customFieldsJson: JSON.stringify(customData) } as any;
                 fd.append('payload', new Blob([JSON.stringify(payload)], { type:'application/json' }));
-                const res = await fetch(`http://localhost:8080/api/public/events/${registerFor.id}/register`,{method:'POST',body:fd});
+                const res = await fetch(API_ENDPOINTS.registerForEvent(registerFor.id),{method:'POST',body:fd});
                 if(res.ok){ 
                   alert('Registered successfully');
                   const wa = (registerFor as any).whatsappGroupUrl;

@@ -43,7 +43,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user, onLogout }) => {
   const fetchAnnouncements = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:8080/api/Admin/Announcements");
+      const response = await fetch("https://csi-backend-4.onrender.com/api/Admin/Announcements");
       if (response.ok) {
         const data = await response.json();
         setAnnouncements(data);

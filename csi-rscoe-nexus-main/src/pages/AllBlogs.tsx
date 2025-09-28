@@ -158,7 +158,7 @@ const AllBlogs: React.FC = () => {
   useEffect(() => {
     const load = async () => {
       try {
-      const res = await fetch('http://localhost:8080/api/public/blogs');
+      const res = await fetch('https://csi-backend-4.onrender.com/api/public/blogs');
         if (res.ok) {
           const data = await res.json();
           if (data && data.length > 0) {

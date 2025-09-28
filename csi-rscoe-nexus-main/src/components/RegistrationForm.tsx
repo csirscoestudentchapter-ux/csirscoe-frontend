@@ -27,7 +27,7 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
     if (event) {
       const load = async () => {
         try {
-          const res = await fetch(`http://localhost:8080/api/admin/events/${event.id}/registration-schema`);
+          const res = await fetch(`https://csi-backend-4.onrender.com/api/admin/events/${event.id}/registration-schema`);
           if (res.ok) {
             const text = await res.text();
             const arr = text ? JSON.parse(text) : [];
@@ -64,7 +64,7 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
         const payload = { customFieldsJson } as any;
         const fd = new FormData();
         fd.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
-        const res = await fetch(`http://localhost:8080/api/public/events/${event.id}/register`, { method: 'POST', body: fd });
+        const res = await fetch(`https://csi-backend-4.onrender.com/api/public/events/${event.id}/register`, { method: 'POST', body: fd });
         if (res.ok) { onSuccess && onSuccess(); onClose(); }
         else { const t = await res.text(); alert(t || 'Failed to register'); }
       } else {
@@ -78,7 +78,7 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
           year: form['Year'] || form.year
         };
         
-        const res = await fetch('http://localhost:8080/api/public/register', {
+        const res = await fetch('https://csi-backend-4.onrender.com/api/public/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
