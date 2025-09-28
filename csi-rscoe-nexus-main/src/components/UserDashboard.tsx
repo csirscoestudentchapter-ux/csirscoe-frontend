@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { 
   User, 
@@ -26,8 +26,14 @@ interface Announcement {
   createdAt: string;
 }
 
+interface User {
+  name: string;
+  email: string;
+  role: string;
+}
+
 interface UserDashboardProps {
-  user: any;
+  user: User | null;
   onLogout: () => void;
 }
 
@@ -36,11 +42,7 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user, onLogout }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchAnnouncements();
-  }, []);
-
-  const fetchAnnouncements = async () => {
+  const fetchAnnouncements = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await fetch("https://csi-backend-4.onrender.com/api/Admin/Announcements");
@@ -57,7 +59,11 @@ const UserDashboard: React.FC<UserDashboardProps> = ({ user, onLogout }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, [fetchAnnouncements]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
