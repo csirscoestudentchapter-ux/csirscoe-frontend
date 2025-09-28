@@ -11,14 +11,27 @@ const Events: React.FC = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
-  interface EventItem { id: number; title: string; description: string; date: string; location: string; attendees?: string; status?: string; image?: string; qrCodeUrl?: string }
+  interface EventItem { 
+    id: number; 
+    title: string; 
+    description: string; 
+    date: string; 
+    location: string; 
+    attendees?: string; 
+    status?: string; 
+    image?: string; 
+    qrCodeUrl?: string;
+    rulebookUrl?: string;
+    whatsappGroupUrl?: string;
+    qrUrl?: string;
+  }
   const [events, setEvents] = useState<EventItem[]>([]);
   const [showDetails, setShowDetails] = useState<EventItem | null>(null);
   const [step, setStep] = useState<1 | 2>(1);
   const [registerFor, setRegisterFor] = useState<EventItem | null>(null);
   const [customFields, setCustomFields] = useState<Array<{ label: string; type: string; required: boolean; options?: string }>>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<Record<string, string>>({
     name: '',
     teamName: '',
     memberNames: '',
@@ -195,9 +208,11 @@ const Events: React.FC = () => {
             <span className={step===2? 'font-semibold text-primary' : 'text-muted-foreground'}>Step 2: Payment</span>
           </div>
           {(() => { 
-            const rb = ((registerFor as any).rulebookUrl||'').toLowerCase();
-            const derived = (registerFor as any).qrCodeUrl || (registerFor as any).image || (rb.match(/\.(png|jpe?g)$/) ? (registerFor as any).rulebookUrl : '');
-            (registerFor as any).qrUrl = derived || '/uploads/QRcode.jpg';
+            const rb = (registerFor?.rulebookUrl || '').toLowerCase();
+            const derived = registerFor?.qrCodeUrl || registerFor?.image || (rb.match(/\.(png|jpe?g)$/) ? registerFor?.rulebookUrl : '');
+            if (registerFor) {
+              registerFor.qrUrl = derived || '/uploads/QRcode.jpg';
+            }
             return null; 
           })()}
           {/* Dynamic custom fields loaded from backend schema */}
@@ -207,7 +222,7 @@ const Events: React.FC = () => {
                 {field.type === 'select' ? (
                   <select
                     className="p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input"
-                    value={(form as any)[field.label] || ''}
+                    value={form[field.label] || ''}
                     onChange={e => setForm({ ...form, [field.label]: e.target.value })}
                     required={field.required}
                   >
@@ -220,7 +235,7 @@ const Events: React.FC = () => {
                   <textarea
                     className="p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input"
                     placeholder={field.label}
-                    value={(form as any)[field.label] || ''}
+                    value={form[field.label] || ''}
                     onChange={e => setForm({ ...form, [field.label]: e.target.value })}
                     required={field.required}
                   />
@@ -228,14 +243,14 @@ const Events: React.FC = () => {
                   <input
                     className="p-2 border rounded w-full opacity-70 bg-background text-foreground placeholder:text-muted-foreground border-input"
                     placeholder={field.label}
-                    value={(form as any)[field.label] || ''}
+                    value={form[field.label] || ''}
                     readOnly
                   />
                 ) : (
                   <input
                     className="p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input"
                     placeholder={field.label}
-                    value={(form as any)[field.label] || ''}
+                    value={form[field.label] || ''}
                     onChange={e => setForm({ ...form, [field.label]: e.target.value })}
                     required={field.required}
                   />
@@ -246,11 +261,11 @@ const Events: React.FC = () => {
           {step === 2 && (
             <div className="my-4 p-4 border rounded bg-white flex flex-col items-center justify-center">
               <div className="text-sm mb-3 text-center">Scan to pay</div>
-              {(registerFor as any).qrUrl ? (
+              {registerFor?.qrUrl ? (
                 <>
-                  <img src={(registerFor as any).qrUrl} alt="Payment QR" className="w-72 h-72 md:w-80 md:h-80 object-contain" onError={(e)=>{ (e.currentTarget as HTMLImageElement).style.display='none'; }} />
+                  <img src={registerFor.qrUrl} alt="Payment QR" className="w-72 h-72 md:w-80 md:h-80 object-contain" onError={(e)=>{ (e.currentTarget as HTMLImageElement).style.display='none'; }} />
                   <div className="mt-3 text-sm text-center">
-                    <a href={(registerFor as any).qrUrl} target="_blank" className="text-primary underline">Open QR in new tab</a>
+                    <a href={registerFor.qrUrl} target="_blank" className="text-primary underline">Open QR in new tab</a>
                   </div>
                 </>
               ) : (
@@ -262,7 +277,7 @@ const Events: React.FC = () => {
                   const findVal = (keys: string[]) => {
                     for (const k of keys) {
                       const key = customFields.find(f => f.label.toLowerCase() === k.toLowerCase())?.label;
-                      if (key && (form as any)[key]) return (form as any)[key];
+                      if (key && form[key]) return form[key];
                     }
                     return '';
                   };
@@ -288,7 +303,9 @@ const Events: React.FC = () => {
               try{
                 const res = await fetch(API_ENDPOINTS.getEventTeamAvailable(registerFor.id, form.teamName));
                 if(res.ok){ const txt = await res.text(); setTeamAvailable(txt === 'true'); }
-              }catch{}
+              }catch{
+                // Team availability check failed, continue
+              }
             }} />
             <input className="p-2 border rounded md:col-span-2 bg-background text-foreground placeholder:text-muted-foreground border-input" placeholder="Member Names (comma-separated)" value={form.memberNames} onChange={e=>setForm({...form,memberNames:e.target.value})} />
             <input className="p-2 border rounded bg-background text-foreground placeholder:text-muted-foreground border-input" placeholder="Email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} />
@@ -300,7 +317,7 @@ const Events: React.FC = () => {
             {step === 2 && (
             <div className="md:col-span-1">
               <input className="p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground border-input" placeholder="Transaction ID" value={form.transactionId} onChange={e=>setForm({...form,transactionId:e.target.value})} />
-              {(registerFor as any).qrUrl && (
+              {registerFor?.qrUrl && (
                 <div className="text-xs text-muted-foreground mt-1">After paying via QR, enter the transaction ID here.</div>
               )}
             </div>
@@ -321,7 +338,7 @@ const Events: React.FC = () => {
                 if (!form.phone.trim() || !/^\d{10}$/.test(form.phone.replace(/\s+/g,''))) { alert('Enter 10-digit mobile number'); return; }
                 // If custom fields include any required fields, ensure they are filled
                 for (const f of customFields) {
-                  if (f.required && !(form as any)[f.label]) { alert(`Please fill ${f.label}`); return; }
+                  if (f.required && !form[f.label]) { alert(`Please fill ${f.label}`); return; }
                 }
                 setStep(2);
               }}>Next</Button>
@@ -338,18 +355,18 @@ const Events: React.FC = () => {
                 if (registerFor?.qrCodeUrl && !form.transactionId.trim()) { alert('Please enter Transaction ID after payment'); return; }
                 // Ensure no required custom field empty before submit (in case user bypassed step)
                 for (const f of customFields) {
-                  if (f.required && !(form as any)[f.label]) { alert(`Please fill ${f.label}`); return; }
+                  if (f.required && !form[f.label]) { alert(`Please fill ${f.label}`); return; }
                 }
                 const fd = new FormData();
                 // Build custom fields payload as a JSON object mapping label -> value
-                const customData: Record<string, any> = {};
-                customFields.forEach(f => { (customData as any)[f.label] = (form as any)[f.label] || ''; });
-                const payload = { ...form, customFieldsJson: JSON.stringify(customData) } as any;
+                const customData: Record<string, string> = {};
+                customFields.forEach(f => { customData[f.label] = form[f.label] || ''; });
+                const payload = { ...form, customFieldsJson: JSON.stringify(customData) };
                 fd.append('payload', new Blob([JSON.stringify(payload)], { type:'application/json' }));
                 const res = await fetch(API_ENDPOINTS.registerForEvent(registerFor.id),{method:'POST',body:fd});
                 if(res.ok){ 
                   alert('Registered successfully');
-                  const wa = (registerFor as any).whatsappGroupUrl;
+                  const wa = registerFor?.whatsappGroupUrl;
                   if (wa) { window.open(wa, '_blank'); }
                   setRegisterFor(null); setStep(1);
                 }
@@ -370,8 +387,8 @@ const Events: React.FC = () => {
           <div className="text-sm mb-2">Date: {showDetails.date}</div>
           <div className="text-sm mb-4">Location: {showDetails.location}</div>
           <div className="flex items-center gap-4 mb-2">
-            {(showDetails as any).rulebookUrl && (
-              <a href={(showDetails as any).rulebookUrl} target="_blank" className="text-primary underline">View Rulebook</a>
+            {showDetails?.rulebookUrl && (
+              <a href={showDetails.rulebookUrl} target="_blank" className="text-primary underline">View Rulebook</a>
             )}
             {showDetails.qrCodeUrl && (
               <a href={showDetails.qrCodeUrl} target="_blank" className="text-primary underline">View Payment QR</a>
