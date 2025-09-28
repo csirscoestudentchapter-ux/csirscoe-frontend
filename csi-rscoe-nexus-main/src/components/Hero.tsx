@@ -82,6 +82,37 @@ const Hero: React.FC = () => {
       opacity
     }} className="relative z-10 flex items-center justify-center min-h-screen px-4 text-center">
         <div className="max-w-4xl mx-auto">
+          {/* Floating Logo above the driven statement */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.1 }}
+            className="flex justify-center mb-6"
+          >
+            <motion.div
+              className="relative"
+              animate={{
+                y: [0, -10, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <img
+                src="/uploads/csi.png"
+                alt="CSI Logo"
+                className="w-20 h-20 md:w-24 md:h-24 object-contain drop-shadow-lg"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).style.display = 'none';
+                }}
+              />
+              {/* Glow effect */}
+              <div className="absolute inset-0 bg-primary/20 rounded-full blur-md -z-10" />
+            </motion.div>
+          </motion.div>
+
           <motion.div initial={{
           opacity: 0,
           y: 50

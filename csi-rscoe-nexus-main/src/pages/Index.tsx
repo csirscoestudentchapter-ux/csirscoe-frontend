@@ -5,6 +5,7 @@ import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Events from '@/components/Events';
+import PastEvents from '@/components/PastEvents';
 import Team from '@/components/Team';
 import Blogs from '@/components/Blogs';
 import Contact from '@/components/Contact';
@@ -44,6 +45,7 @@ const Index = () => {
 
         <About />
         <Events />
+        <PastEvents />
         <Faculty />
         <Team />
         <Blogs />
