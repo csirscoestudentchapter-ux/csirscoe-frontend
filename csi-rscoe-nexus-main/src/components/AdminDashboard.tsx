@@ -158,13 +158,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [customFields, setCustomFields] = useState<Array<{label: string, type: string, required: boolean, options?: string}>>([]);
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchUsers();
-    fetchAnnouncements();
-    fetchEvents();
-    fetchBlogs();
-    fetchTeam();
-  }, []);
+  
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -212,7 +206,9 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
             try {
               const r = await fetch(`https://csi-backend-4.onrender.com/api/admin/events/${e.id}/registrations/count`);
               if (r.ok) { const n = await r.text(); return parseInt(n || '0', 10) || 0; }
-            } catch {}
+            } catch (err) {
+              console.error('Failed to fetch registration count', err);
+            }
             return 0;
           })
         );
@@ -321,6 +317,15 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
       setTeam([]);
     }
   }, []);
+
+  // Initial load after all callbacks are declared
+  useEffect(() => {
+    fetchUsers();
+    fetchAnnouncements();
+    fetchEvents();
+    fetchBlogs();
+    fetchTeam();
+  }, [fetchUsers, fetchAnnouncements, fetchEvents, fetchBlogs, fetchTeam]);
 
   const handleUserSubmit = async () => {
     setIsLoading(true);
@@ -446,7 +451,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
       }
       setShowEventModal(false);
       setEditingEvent(null);
-      setEventForm({ title: "", description: "", date: "", location: "", status: "upcoming", image: "", fee: 0, flyoverDescription: "", rulebookUrl: "", registrationDeadline: "" });
+      setEventForm({ title: "", description: "", date: "", location: "", status: "upcoming", image: "", fee: 0, flyoverDescription: "", details: "", rulebookUrl: "", qrCodeUrl: "", whatsappGroupUrl: "", registrationDeadline: "" });
       setCustomFields([]);
     } catch (error) {
       toast({
@@ -981,13 +986,13 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
                                 location: event.location,
                                 status: event.status,
                                 image: event.image || "",
-                                fee: (event as any).fee || 0,
-                                flyoverDescription: (event as any).flyoverDescription || "",
-                                details: (event as any).details || "",
-                                rulebookUrl: (event as any).rulebookUrl || "",
-                                qrCodeUrl: (event as any).qrCodeUrl || "",
-                                whatsappGroupUrl: (event as any).whatsappGroupUrl || "",
-                                registrationDeadline: (event as any).registrationDeadline || ""
+                                fee: (event as unknown as { fee?: number }).fee || 0,
+                                flyoverDescription: (event as unknown as { flyoverDescription?: string }).flyoverDescription || "",
+                                details: (event as unknown as { details?: string }).details || "",
+                                rulebookUrl: (event as unknown as { rulebookUrl?: string }).rulebookUrl || "",
+                                qrCodeUrl: (event as unknown as { qrCodeUrl?: string }).qrCodeUrl || "",
+                                whatsappGroupUrl: (event as unknown as { whatsappGroupUrl?: string }).whatsappGroupUrl || "",
+                                registrationDeadline: (event as unknown as { registrationDeadline?: string }).registrationDeadline || ""
                               });
                               setShowEventModal(true);
                             }}
@@ -1009,7 +1014,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
               </div>
               {/* Registrations Modal */}
               <Dialog open={showRegistrationsModal} onOpenChange={setShowRegistrationsModal}>
-                <DialogContent className="max-w-3xl">
+                <DialogContent className="max-w-3xl w-[95vw] p-4 sm:p-6">
                   <DialogHeader>
                     <DialogTitle>Registrations {selectedEventForRegs ? `for ${selectedEventForRegs.title}` : ''}</DialogTitle>
                   </DialogHeader>
@@ -1018,15 +1023,15 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
                   ) : (
                     <div className="mt-2">
                       <div className="mb-3 text-sm text-gray-700">Total: {registrations.length}</div>
-                      <div className="max-h-96 overflow-y-auto">
-                        <table className="w-full text-left text-sm">
+                      <div className="max-h-96 overflow-y-auto overflow-x-auto">
+                        <table className="w-full min-w-[700px] text-left text-sm">
                           <thead>
                             <tr>
                               <th className="py-2 px-2 border-b">#</th>
                               <th className="py-2 px-2 border-b">Name</th>
                               <th className="py-2 px-2 border-b">Email</th>
                               <th className="py-2 px-2 border-b">Phone</th>
-                              <th className="py-2 px-2 border-b">Department</th>
+                  <th className="py-2 px-2 border-b">Branch</th>
                               <th className="py-2 px-2 border-b">Year</th>
                             </tr>
                           </thead>
@@ -1037,7 +1042,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
                                 <td className="py-2 px-2 border-b">{r.name || ''}</td>
                                 <td className="py-2 px-2 border-b">{r.email || ''}</td>
                                 <td className="py-2 px-2 border-b">{r.phone || ''}</td>
-                                <td className="py-2 px-2 border-b">{r.department || ''}</td>
+                                <td className="py-2 px-2 border-b">{r.branch || ''}</td>
                                 <td className="py-2 px-2 border-b">{r.year || ''}</td>
                               </tr>
                             ))}
@@ -1138,7 +1143,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
       {/* User Modal */}
       <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <DialogContent>
+        <DialogContent className="max-w-md w-[95vw] sm:w-full p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>{editingUser ? "Edit User" : "Add New User"}</DialogTitle>
           </DialogHeader>
@@ -1182,7 +1187,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
       {/* Announcement Modal */}
       <Dialog open={showAnnouncementModal} onOpenChange={setShowAnnouncementModal}>
-        <DialogContent>
+        <DialogContent className="max-w-md w-[95vw] sm:w-full p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>Add New Announcement</DialogTitle>
           </DialogHeader>
@@ -1212,7 +1217,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
       {/* Event Modal */}
       <Dialog open={showEventModal} onOpenChange={setShowEventModal}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl w-[95vw] p-4 sm:p-6">
           <DialogHeader>
             <DialogTitle>{editingEvent ? "Edit Event" : "Add New Event"}</DialogTitle>
           </DialogHeader>
@@ -1228,7 +1233,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
               onChange={(e) => setEventForm({ ...eventForm, description: e.target.value })}
               rows={3}
             />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 type="date"
                 value={eventForm.date}
@@ -1240,7 +1245,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
                 onChange={(e) => setEventForm({ ...eventForm, location: e.target.value })}
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Removed Expected Attendees input */}
               <Input
                 type="number"
@@ -1249,7 +1254,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
                 onChange={(e) => setEventForm({ ...eventForm, fee: parseInt(e.target.value) || 0 })}
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 placeholder="Flyover Description"
                 value={eventForm.flyoverDescription}
@@ -1261,7 +1266,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
                 onChange={(e) => setEventForm({ ...eventForm, rulebookUrl: e.target.value })}
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 placeholder="Payment QR URL"
                 value={eventForm.qrCodeUrl}

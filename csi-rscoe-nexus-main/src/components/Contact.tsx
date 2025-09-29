@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { API_ENDPOINTS } from '@/config/api';
 const Contact: React.FC = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
@@ -27,7 +28,15 @@ const Contact: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("https://csi-backend-4.onrender.com/api/public/contactus", {
+      if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+        toast({ title: 'Validation error', description: 'Please fill all fields.', variant: 'destructive' });
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        toast({ title: 'Invalid email', description: 'Enter a valid email address.', variant: 'destructive' });
+        return;
+      }
+      const response = await fetch(API_ENDPOINTS.CONTACT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -37,17 +46,19 @@ const Contact: React.FC = () => {
         }),
       });
 
+      const resultText = await response.text();
       if (response.ok) {
-        const result = await response.text();
+        const message = resultText || 'Message delivered successfully';
         toast({
           title: "Message Sent!",
-          description: result,
+          description: message,
         });
         setFormData({ name: "", email: "", message: "" });
       } else {
+        const err = resultText || 'Server error or invalid data';
         toast({
           title: "Failed to send",
-          description: "Server error or invalid data",
+          description: err,
           variant: "destructive",
         });
       }

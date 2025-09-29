@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { API_ENDPOINTS } from '@/config/api';
 
 type CustomField = { label: string; type: string; required: boolean; options?: string };
 
@@ -27,7 +28,7 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
     if (event) {
       const load = async () => {
         try {
-          const res = await fetch(`https://csi-backend-4.onrender.com/api/admin/events/${event.id}/registration-schema`);
+          const res = await fetch(API_ENDPOINTS.getEventRegistrationSchema(event.id));
           if (res.ok) {
             const text = await res.text();
             const arr = text ? JSON.parse(text) : [];
@@ -64,9 +65,12 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
         const payload = { customFieldsJson } as any;
         const fd = new FormData();
         fd.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
-        const res = await fetch(`https://csi-backend-4.onrender.com/api/public/events/${event.id}/register`, { method: 'POST', body: fd });
+        const res = await fetch(API_ENDPOINTS.registerForEvent(event.id), { method: 'POST', body: fd });
         if (res.ok) { onSuccess && onSuccess(); onClose(); }
-        else { const t = await res.text(); alert(t || 'Failed to register'); }
+        else {
+          const t = await res.text();
+          alert(t || 'Failed to register for event');
+        }
       } else {
         // Club membership registration
         const payload = {
@@ -78,19 +82,20 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
           year: form['Year'] || form.year
         };
         
-        const res = await fetch('https://csi-backend-4.onrender.com/api/public/register', {
+        const res = await fetch(API_ENDPOINTS.REGISTER, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         
-        if (res.ok) { 
-          alert('Registration successful! Welcome to CSI Club!');
-          onSuccess && onSuccess(); 
-          onClose(); 
-        } else { 
-          const t = await res.text(); 
-          alert(t || 'Failed to register'); 
+        if (res.ok) {
+          const msg = await res.text();
+          alert(msg || 'Registration successful! Welcome to CSI Club!');
+          onSuccess && onSuccess();
+          onClose();
+        } else {
+          const t = await res.text();
+          alert(t || 'Failed to register for club');
         }
       }
     } finally { 
