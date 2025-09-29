@@ -1,4 +1,4 @@
-import { r as reactExports, t as twMerge, c as clsx, j as jsxRuntimeExports, V as Viewport, R as Root2, A as Action, C as Close, X, T as Title, D as Description, a as cva, P as Provider, b as j, $ as $e, d as Content2, e as Provider$1, S as Slot, m as motion, L as LogIn, M as Menu, f as AnimatePresence, u as useScroll, g as useTransform, h as ArrowDown, i as useInView, k as Code, U as Users, l as Trophy, n as Rocket, o as useEmblaCarousel, p as ArrowLeft, q as ArrowRight, s as Calendar, v as MapPin, w as Clock, x as User, y as Award, z as ChevronLeft, B as ChevronRight, E as Linkedin, F as Mail, Z as ZoomIn, G as Send, H as Phone, I as MessageSquare, O as Overlay, J as Content, K as Close$1, N as Title$1, Q as Description$1, W as Portal, Y as Root, _ as Lock, a0 as ExternalLink, a1 as Instagram, a2 as Github, a3 as useNavigate, a4 as useParams, a5 as React, a6 as Upload, a7 as LogOut, a8 as ChartColumn, a9 as Megaphone, aa as FileText, ab as UserPlus, ac as Settings, ad as Activity, ae as Plus, af as SquarePen, ag as Trash2, ah as useLocation, ai as QueryClient, aj as QueryClientProvider, ak as BrowserRouter, al as Routes, am as Route, an as createRoot } from "./vendor-CETAdlZ-.js";
+import { r as reactExports, t as twMerge, c as clsx, j as jsxRuntimeExports, V as Viewport, R as Root2, A as Action, C as Close, X, T as Title, D as Description, a as cva, P as Provider, b as j, $ as $e, d as Content2, e as Provider$1, S as Slot, m as motion, L as LogIn, M as Menu, f as AnimatePresence, u as useScroll, g as useTransform, h as ArrowDown, i as useInView, k as Code, U as Users, l as Trophy, n as Rocket, o as useEmblaCarousel, p as ArrowLeft, q as ArrowRight, s as Calendar, v as MapPin, w as Clock, x as User, y as Award, z as ChevronLeft, B as ChevronRight, E as Linkedin, F as Mail, Z as ZoomIn, G as createClient, H as Send, I as Phone, J as MessageSquare, O as Overlay, K as Content, N as Close$1, Q as Title$1, W as Description$1, Y as Portal, _ as Root, a0 as Lock, a1 as ExternalLink, a2 as Instagram, a3 as Github, a4 as useNavigate, a5 as useParams, a6 as React, a7 as Upload, a8 as LogOut, a9 as ChartColumn, aa as Megaphone, ab as FileText, ac as UserPlus, ad as Settings, ae as Activity, af as Plus, ag as SquarePen, ah as Trash2, ai as useLocation, aj as QueryClient, ak as QueryClientProvider, al as BrowserRouter, am as Routes, an as Route, ao as createRoot } from "./vendor-Coh1S776.js";
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -2112,6 +2112,18 @@ const Textarea = reactExports.forwardRef(
   }
 );
 Textarea.displayName = "Textarea";
+const supabaseUrl = "https://qzmnsrankbpqnuaxoyhp.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6bW5zcmFua2JwcW51YXhveWhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwODEyNDMsImV4cCI6MjA3NDY1NzI0M30.ZSHZPfiQNvXy-fAmcpePq_oYATpaIy4bQeJMKvG6u38";
+const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: { persistSession: false }
+});
+async function sendContactEmail(params) {
+  const { data, error } = await supabase.functions.invoke("contact-email", {
+    body: params
+  });
+  if (error) throw error;
+  return data;
+}
 const Contact = () => {
   const ref = reactExports.useRef(null);
   const isInView = useInView(ref, {
@@ -2131,33 +2143,29 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const response = await fetch("https://csi-backend-4.onrender.com/api/public/contactus", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          msg: formData.message
-        })
-      });
-      if (response.ok) {
-        const result = await response.text();
-        toast2({
-          title: "Message Sent!",
-          description: result
-        });
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        toast2({
-          title: "Failed to send",
-          description: "Server error or invalid data",
-          variant: "destructive"
-        });
+      if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+        toast2({ title: "Validation error", description: "Please fill all fields.", variant: "destructive" });
+        return;
       }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        toast2({ title: "Invalid email", description: "Enter a valid email address.", variant: "destructive" });
+        return;
+      }
+      await sendContactEmail({
+        name: formData.name,
+        email: formData.email,
+        msg: formData.message
+      });
+      toast2({
+        title: "Message Sent!",
+        description: "Message delivered successfully"
+      });
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Could not send message";
       toast2({
         title: "Error",
-        description: "Could not connect to backend",
+        description: message,
         variant: "destructive"
       });
     } finally {
@@ -3432,13 +3440,6 @@ const AdminDashboard = ({ user, onLogout }) => {
   const [imageFile, setImageFile] = reactExports.useState(null);
   const [customFields, setCustomFields] = reactExports.useState([]);
   const { toast: toast2 } = useToast();
-  reactExports.useEffect(() => {
-    fetchUsers();
-    fetchAnnouncements();
-    fetchEvents();
-    fetchBlogs();
-    fetchTeam();
-  }, []);
   const fetchUsers = reactExports.useCallback(async () => {
     try {
       const response = await fetch("https://csi-backend-4.onrender.com/api/admin/users");
@@ -3485,7 +3486,8 @@ const AdminDashboard = ({ user, onLogout }) => {
                 const n = await r.text();
                 return parseInt(n || "0", 10) || 0;
               }
-            } catch {
+            } catch (err) {
+              console.error("Failed to fetch registration count", err);
             }
             return 0;
           })
@@ -3587,6 +3589,13 @@ const AdminDashboard = ({ user, onLogout }) => {
       setTeam([]);
     }
   }, []);
+  reactExports.useEffect(() => {
+    fetchUsers();
+    fetchAnnouncements();
+    fetchEvents();
+    fetchBlogs();
+    fetchTeam();
+  }, [fetchUsers, fetchAnnouncements, fetchEvents, fetchBlogs, fetchTeam]);
   const handleUserSubmit = async () => {
     setIsLoading(true);
     try {
@@ -3696,7 +3705,7 @@ const AdminDashboard = ({ user, onLogout }) => {
       }
       setShowEventModal(false);
       setEditingEvent(null);
-      setEventForm({ title: "", description: "", date: "", location: "", status: "upcoming", image: "", fee: 0, flyoverDescription: "", rulebookUrl: "", registrationDeadline: "" });
+      setEventForm({ title: "", description: "", date: "", location: "", status: "upcoming", image: "", fee: 0, flyoverDescription: "", details: "", rulebookUrl: "", qrCodeUrl: "", whatsappGroupUrl: "", registrationDeadline: "" });
       setCustomFields([]);
     } catch (error) {
       toast2({
@@ -4119,7 +4128,7 @@ const AdminDashboard = ({ user, onLogout }) => {
                   )
                 ] })
               ] }) }) }, event.id)) }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: showRegistrationsModal, onOpenChange: setShowRegistrationsModal, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-3xl", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: showRegistrationsModal, onOpenChange: setShowRegistrationsModal, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-3xl w-[95vw] p-4 sm:p-6", children: [
                 /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogTitle, { children: [
                   "Registrations ",
                   selectedEventForRegs ? `for ${selectedEventForRegs.title}` : ""
@@ -4129,13 +4138,13 @@ const AdminDashboard = ({ user, onLogout }) => {
                     "Total: ",
                     registrations.length
                   ] }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-h-96 overflow-y-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-left text-sm", children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "max-h-96 overflow-y-auto overflow-x-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-left text-sm", children: [
                     /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
                       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2 px-2 border-b", children: "#" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2 px-2 border-b", children: "Name" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2 px-2 border-b", children: "Email" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2 px-2 border-b", children: "Phone" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2 px-2 border-b", children: "Department" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2 px-2 border-b", children: "Branch" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "py-2 px-2 border-b", children: "Year" })
                     ] }) }),
                     /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: registrations.map((r, idx) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { children: [
@@ -4143,7 +4152,7 @@ const AdminDashboard = ({ user, onLogout }) => {
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-2 border-b", children: r.name || "" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-2 border-b", children: r.email || "" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-2 border-b", children: r.phone || "" }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-2 border-b", children: r.department || "" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-2 border-b", children: r.branch || "" }),
                       /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "py-2 px-2 border-b", children: r.year || "" })
                     ] }, r.id || idx)) })
                   ] }) })
@@ -4223,7 +4232,7 @@ const AdminDashboard = ({ user, onLogout }) => {
         activeTab
       )
     ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: showUserModal, onOpenChange: setShowUserModal, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: showUserModal, onOpenChange: setShowUserModal, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-md w-[95vw] sm:w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { children: editingUser ? "Edit User" : "Add New User" }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -4270,7 +4279,7 @@ const AdminDashboard = ({ user, onLogout }) => {
         ] })
       ] })
     ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: showAnnouncementModal, onOpenChange: setShowAnnouncementModal, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: showAnnouncementModal, onOpenChange: setShowAnnouncementModal, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-md w-[95vw] sm:w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { children: "Add New Announcement" }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -4296,7 +4305,7 @@ const AdminDashboard = ({ user, onLogout }) => {
         ] })
       ] })
     ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: showEventModal, onOpenChange: setShowEventModal, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-2xl", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: showEventModal, onOpenChange: setShowEventModal, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-2xl w-[95vw] p-4 sm:p-6 max-h-[90vh] overflow-y-auto", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { children: editingEvent ? "Edit Event" : "Add New Event" }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -4316,7 +4325,7 @@ const AdminDashboard = ({ user, onLogout }) => {
             rows: 3
           }
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Input,
             {
@@ -4334,7 +4343,7 @@ const AdminDashboard = ({ user, onLogout }) => {
             }
           )
         ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-2 gap-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
           Input,
           {
             type: "number",
@@ -4343,7 +4352,7 @@ const AdminDashboard = ({ user, onLogout }) => {
             onChange: (e) => setEventForm({ ...eventForm, fee: parseInt(e.target.value) || 0 })
           }
         ) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-4", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx(
             Input,
             {
@@ -4360,26 +4369,6 @@ const AdminDashboard = ({ user, onLogout }) => {
               onChange: (e) => setEventForm({ ...eventForm, rulebookUrl: e.target.value })
             }
           )
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-4", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            Input,
-            {
-              placeholder: "Payment QR URL",
-              value: eventForm.qrCodeUrl,
-              onChange: (e) => setEventForm({ ...eventForm, qrCodeUrl: e.target.value })
-            }
-          ),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2", children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-sm", children: "or Upload" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("input", { type: "file", accept: "image/*", onChange: async (e) => {
-              var _a;
-              const file = (_a = e.target.files) == null ? void 0 : _a[0];
-              if (!file) return;
-              const url = await uploadImage(file);
-              if (url) setEventForm((f) => ({ ...f, qrCodeUrl: url }));
-            } })
-          ] })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           Textarea,
@@ -4508,7 +4497,7 @@ const AdminDashboard = ({ user, onLogout }) => {
         ] })
       ] })
     ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: showBlogModal, onOpenChange: setShowBlogModal, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-2xl", children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: showBlogModal, onOpenChange: setShowBlogModal, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { className: "max-w-2xl w-[95vw] p-4 sm:p-6 max-h-[90vh] overflow-y-auto", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(DialogHeader, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { children: editingBlog ? "Edit Blog" : "Add New Blog" }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-4", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -4619,7 +4608,7 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
     if (event) {
       const load = async () => {
         try {
-          const res = await fetch(`https://csi-backend-4.onrender.com/api/admin/events/${event.id}/registration-schema`);
+          const res = await fetch(API_ENDPOINTS.getEventRegistrationSchema(event.id));
           if (res.ok) {
             const text = await res.text();
             const arr = text ? JSON.parse(text) : [];
@@ -4651,16 +4640,34 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
     try {
       if (event) {
         const customFieldsJson = JSON.stringify(form);
-        const payload = { customFieldsJson };
+        const payload = {
+          name: form["Full Name"] || form.name,
+          email: form["Email"] || form.email,
+          phone: form["Phone"] || form.phone,
+          college: form["College"] || form.college,
+          year: form["Year"] || form.year,
+          department: form["Branch"] || form.branch,
+          customFieldsJson
+        };
         const fd = new FormData();
         fd.append("payload", new Blob([JSON.stringify(payload)], { type: "application/json" }));
-        const res = await fetch(`https://csi-backend-4.onrender.com/api/public/events/${event.id}/register`, { method: "POST", body: fd });
+        const res = await fetch(API_ENDPOINTS.registerForEvent(event.id), { method: "POST", body: fd });
         if (res.ok) {
           onSuccess && onSuccess();
+          const whatsapp = form["WhatsApp Group URL"] || form.whatsappGroupUrl;
+          if (whatsapp && typeof whatsapp === "string") {
+            window.open(whatsapp, "_blank");
+          }
           onClose();
         } else {
-          const t = await res.text();
-          alert(t || "Failed to register");
+          if (res.status === 409) {
+            alert("Duplicate registration detected (email/phone/team).");
+          } else if (res.status === 400) {
+            alert("Invalid data. Please check your email/phone.");
+          } else {
+            const t = await res.text();
+            alert(t || "Failed to register for event");
+          }
         }
       } else {
         const payload = {
@@ -4671,18 +4678,19 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
           branch: form["Branch"] || form.branch,
           year: form["Year"] || form.year
         };
-        const res = await fetch("https://csi-backend-4.onrender.com/api/public/register", {
+        const res = await fetch(API_ENDPOINTS.REGISTER, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
         if (res.ok) {
-          alert("Registration successful! Welcome to CSI Club!");
+          const msg = await res.text();
+          alert(msg || "Registration successful! Welcome to CSI Club!");
           onSuccess && onSuccess();
           onClose();
         } else {
           const t = await res.text();
-          alert(t || "Failed to register");
+          alert(t || "Failed to register for club");
         }
       }
     } finally {

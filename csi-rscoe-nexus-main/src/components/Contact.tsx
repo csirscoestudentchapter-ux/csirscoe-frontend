@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { API_ENDPOINTS } from '@/config/api';
+import { sendContactEmail } from '@/lib/supabase';
 const Contact: React.FC = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
@@ -36,36 +36,21 @@ const Contact: React.FC = () => {
         toast({ title: 'Invalid email', description: 'Enter a valid email address.', variant: 'destructive' });
         return;
       }
-      const response = await fetch(API_ENDPOINTS.CONTACT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json, text/plain" },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          msg: formData.message 
-        }),
+      await sendContactEmail({
+        name: formData.name,
+        email: formData.email,
+        msg: formData.message,
       });
-
-      const resultText = await response.text();
-      if (response.ok || response.status === 202) {
-        const message = resultText || 'Message delivered successfully';
-        toast({
-          title: "Message Sent!",
-          description: message,
-        });
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        const err = resultText || 'Invalid data. Please check name, email, and message.';
-        toast({
-          title: "Failed to send",
-          description: err,
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
+      toast({
+        title: "Message Sent!",
+        description: 'Message delivered successfully',
+      });
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Could not send message';
       toast({
         title: "Error",
-        description: "Could not connect to backend",
+        description: message,
         variant: "destructive",
       });
     } finally {
