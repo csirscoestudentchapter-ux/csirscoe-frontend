@@ -1266,22 +1266,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
                 onChange={(e) => setEventForm({ ...eventForm, rulebookUrl: e.target.value })}
               />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input
-                placeholder="Payment QR URL"
-                value={eventForm.qrCodeUrl}
-                onChange={(e) => setEventForm({ ...eventForm, qrCodeUrl: e.target.value })}
-              />
-              <div className="flex items-center gap-2">
-                <label className="text-sm">or Upload</label>
-                <input type="file" accept="image/*" onChange={async (e)=>{
-                  const file = e.target.files?.[0];
-                  if(!file) return;
-                  const url = await uploadImage(file);
-                  if (url) setEventForm(f=>({ ...f, qrCodeUrl: url }));
-                }} />
-              </div>
-            </div>
+            {/* QR input removed as requested */}
             <Textarea
               placeholder="Detailed Event Information"
               value={eventForm.details}

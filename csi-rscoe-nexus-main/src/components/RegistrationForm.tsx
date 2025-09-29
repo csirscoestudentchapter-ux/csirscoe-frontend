@@ -74,7 +74,14 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
         const fd = new FormData();
         fd.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
         const res = await fetch(API_ENDPOINTS.registerForEvent(event.id), { method: 'POST', body: fd });
-        if (res.ok) { onSuccess && onSuccess(); onClose(); }
+        if (res.ok) { 
+          onSuccess && onSuccess(); 
+          const whatsapp = (form['WhatsApp Group URL'] || form.whatsappGroupUrl);
+          if (whatsapp && typeof whatsapp === 'string') {
+            window.open(whatsapp, '_blank');
+          }
+          onClose(); 
+        }
         else {
           if (res.status === 409) {
             alert('Duplicate registration detected (email/phone/team).');
