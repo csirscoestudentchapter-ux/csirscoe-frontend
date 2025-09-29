@@ -47,7 +47,7 @@ const Contact: React.FC = () => {
       });
 
       const resultText = await response.text();
-      if (response.ok) {
+      if (response.ok || response.status === 202) {
         const message = resultText || 'Message delivered successfully';
         toast({
           title: "Message Sent!",
