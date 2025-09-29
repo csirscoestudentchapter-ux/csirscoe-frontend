@@ -62,14 +62,28 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
       if (event) {
         // Event registration
         const customFieldsJson = JSON.stringify(form);
-        const payload = { customFieldsJson } as any;
+        const payload: Record<string, any> = {
+          name: form['Full Name'] || form.name,
+          email: form['Email'] || form.email,
+          phone: form['Phone'] || form.phone,
+          college: form['College'] || form.college,
+          year: form['Year'] || form.year,
+          department: form['Branch'] || form.branch,
+          customFieldsJson
+        };
         const fd = new FormData();
         fd.append('payload', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
         const res = await fetch(API_ENDPOINTS.registerForEvent(event.id), { method: 'POST', body: fd });
         if (res.ok) { onSuccess && onSuccess(); onClose(); }
         else {
-          const t = await res.text();
-          alert(t || 'Failed to register for event');
+          if (res.status === 409) {
+            alert('Duplicate registration detected (email/phone/team).');
+          } else if (res.status === 400) {
+            alert('Invalid data. Please check your email/phone.');
+          } else {
+            const t = await res.text();
+            alert(t || 'Failed to register for event');
+          }
         }
       } else {
         // Club membership registration

@@ -1143,7 +1143,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
       {/* User Modal */}
       <Dialog open={showUserModal} onOpenChange={setShowUserModal}>
-        <DialogContent className="max-w-md w-[95vw] sm:w-full p-4 sm:p-6">
+        <DialogContent className="max-w-md w-[95vw] sm:w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingUser ? "Edit User" : "Add New User"}</DialogTitle>
           </DialogHeader>
@@ -1187,7 +1187,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
       {/* Announcement Modal */}
       <Dialog open={showAnnouncementModal} onOpenChange={setShowAnnouncementModal}>
-        <DialogContent className="max-w-md w-[95vw] sm:w-full p-4 sm:p-6">
+        <DialogContent className="max-w-md w-[95vw] sm:w-full p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Add New Announcement</DialogTitle>
           </DialogHeader>
@@ -1217,7 +1217,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
       {/* Event Modal */}
       <Dialog open={showEventModal} onOpenChange={setShowEventModal}>
-        <DialogContent className="max-w-2xl w-[95vw] p-4 sm:p-6">
+        <DialogContent className="max-w-2xl w-[95vw] p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingEvent ? "Edit Event" : "Add New Event"}</DialogTitle>
           </DialogHeader>
@@ -1402,7 +1402,7 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
 
       {/* Blog Modal */}
       <Dialog open={showBlogModal} onOpenChange={setShowBlogModal}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl w-[95vw] p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingBlog ? "Edit Blog" : "Add New Blog"}</DialogTitle>
           </DialogHeader>

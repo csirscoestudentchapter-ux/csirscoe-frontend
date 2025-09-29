@@ -55,7 +55,7 @@ const Contact: React.FC = () => {
         });
         setFormData({ name: "", email: "", message: "" });
       } else {
-        const err = resultText || 'Server error or invalid data';
+        const err = resultText || 'Invalid data. Please check name, email, and message.';
         toast({
           title: "Failed to send",
           description: err,
