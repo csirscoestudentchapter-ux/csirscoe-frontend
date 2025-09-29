@@ -38,7 +38,7 @@ const Contact: React.FC = () => {
       }
       const response = await fetch(API_ENDPOINTS.CONTACT, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Accept": "application/json, text/plain" },
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,

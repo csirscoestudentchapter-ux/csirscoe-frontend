@@ -1023,8 +1023,8 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
                   ) : (
                     <div className="mt-2">
                       <div className="mb-3 text-sm text-gray-700">Total: {registrations.length}</div>
-                      <div className="max-h-96 overflow-y-auto overflow-x-auto">
-                        <table className="w-full min-w-[700px] text-left text-sm">
+                      <div className="max-h-96 overflow-y-auto overflow-x-hidden">
+                        <table className="w-full text-left text-sm">
                           <thead>
                             <tr>
                               <th className="py-2 px-2 border-b">#</th>
