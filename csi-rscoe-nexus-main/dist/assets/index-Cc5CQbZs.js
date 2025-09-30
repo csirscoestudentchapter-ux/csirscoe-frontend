@@ -2434,6 +2434,20 @@ const DialogHeader = ({
   }
 );
 DialogHeader.displayName = "DialogHeader";
+const DialogFooter = ({
+  className,
+  ...props
+}) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+  "div",
+  {
+    className: cn(
+      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+      className
+    ),
+    ...props
+  }
+);
+DialogFooter.displayName = "DialogFooter";
 const DialogTitle = reactExports.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
   Title$1,
   {
@@ -4680,6 +4694,8 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
     year: ""
   });
   const [busy, setBusy] = reactExports.useState(false);
+  const [successOpen, setSuccessOpen] = reactExports.useState(false);
+  const [whatsappLink, setWhatsappLink] = reactExports.useState(void 0);
   const teamSizeValue = (() => {
     const v = String(form["Team Members"] ?? "").trim();
     const n = parseInt(v || "1", 10);
@@ -4745,10 +4761,8 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
         if (res.ok) {
           onSuccess && onSuccess();
           const whatsapp = form["WhatsApp Group URL"] || form.whatsappGroupUrl;
-          if (whatsapp && typeof whatsapp === "string") {
-            window.open(whatsapp, "_blank");
-          }
-          onClose();
+          setWhatsappLink(whatsapp);
+          setSuccessOpen(true);
         } else {
           if (res.status === 409) {
             alert("Duplicate registration detected (email/phone/team).");
@@ -4777,11 +4791,9 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
           const msg = await res.text();
           alert(msg || "Registration successful! Welcome to CSI Club!");
           const whatsappEnv = __vite_import_meta_env__ == null ? void 0 : __vite_import_meta_env__.VITE_WHATSAPP_GROUP_URL;
-          if (whatsappEnv && typeof whatsappEnv === "string") {
-            window.open(whatsappEnv, "_blank");
-          }
+          setWhatsappLink(whatsappEnv);
           onSuccess && onSuccess();
-          onClose();
+          setSuccessOpen(true);
         } else {
           const t = await res.text();
           alert(t || "Failed to register for club");
@@ -4847,35 +4859,6 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
         }
       )
     ] }, idx)),
-    event && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium mb-1", children: "Team Members" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "select",
-          {
-            className: "p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary",
-            value: (form["Team Members"] ?? "").toString(),
-            onChange: (e) => setForm({ ...form, ["Team Members"]: e.target.value }),
-            children: Array.from({ length: 10 }).map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: i + 1, children: i + 1 }, i + 1))
-          }
-        )
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: Array.from({ length: teamSizeValue }).map((_, i) => {
-        const key = `Member ${i + 1} Name`;
-        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm text-gray-600 mb-1", children: key }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(
-            "input",
-            {
-              className: "p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary",
-              placeholder: `Enter ${key}`,
-              value: (form[key] ?? "").toString(),
-              onChange: (e) => setForm({ ...form, [key]: e.target.value })
-            }
-          )
-        ] }, key);
-      }) })
-    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-2 mt-6", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
@@ -4894,7 +4877,39 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
           children: busy ? "Processing..." : "Register"
         }
       )
-    ] })
+    ] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open: successOpen, onOpenChange: (open) => {
+      setSuccessOpen(open);
+      if (!open) {
+        onClose();
+      }
+    }, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { children: "Registration Successful" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { children: "You have been registered successfully." })
+      ] }),
+      whatsappLink ? /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm", children: "Join the WhatsApp group for further updates:" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "a",
+          {
+            href: whatsappLink,
+            target: "_blank",
+            rel: "noreferrer",
+            className: "inline-flex items-center justify-center px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700",
+            children: "Open WhatsApp Group"
+          }
+        )
+      ] }) : /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-sm", children: "No WhatsApp link provided." }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(DialogFooter, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "button",
+        {
+          className: "px-4 py-2 rounded border hover:bg-gray-100 transition-colors",
+          onClick: () => setSuccessOpen(false),
+          children: "Close"
+        }
+      ) })
+    ] }) })
   ] });
 };
 const Registration = () => {
