@@ -130,7 +130,7 @@ const Blogs: React.FC = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-playfair font-bold text-foreground mb-6">
-            Latest <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Blogs</span>
+            Latest <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Tech News</span>
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
             Stay updated with the latest trends, tutorials, and insights from our tech community
