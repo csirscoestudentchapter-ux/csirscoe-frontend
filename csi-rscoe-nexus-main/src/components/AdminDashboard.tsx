@@ -1300,6 +1300,15 @@ const [registrations, setRegistrations] = useState<Registration[]>([]);
             
             <div className="space-y-2">
               <label className="text-sm font-medium">Registration Fields</label>
+              <div className="flex flex-wrap gap-2">
+                <Button type="button" variant="outline" onClick={() => {
+                  // Add preset: Team Members (1-5)
+                  setCustomFields([
+                    ...customFields,
+                    { label: 'Team Members', type: 'select', required: true, options: '1,2,3,4,5' }
+                  ]);
+                }}>Add Team Members dropdown</Button>
+              </div>
               {customFields.map((field, index) => (
                 <div key={index} className="flex items-end gap-2 border p-2 rounded">
                   <div className="flex-grow space-y-1">
