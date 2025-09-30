@@ -4803,10 +4803,31 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
       setBusy(false);
     }
   };
+  const requiredTeamSize = (() => {
+    const v = String(form["Team Size"] ?? form["Required Team Size"] ?? "").trim();
+    const n = parseInt(v || "0", 10);
+    return Number.isFinite(n) && n > 0 && n <= 10 ? n : 0;
+  })();
+  const leaderRequired = (() => {
+    const v = String(form["Leader Required"] ?? "").trim().toLowerCase();
+    return v === "true" || v === "yes" || v === "1";
+  })();
   const validateForm = () => {
     for (const field of fields) {
       if (field.required && !form[field.label]) {
         return false;
+      }
+    }
+    if (event && requiredTeamSize > 0) {
+      for (let i = 1; i <= requiredTeamSize; i++) {
+        const name = String(form[`Member ${i} Name`] ?? "").trim();
+        const email = String(form[`Member ${i} Email`] ?? "").trim();
+        const phone = String(form[`Member ${i} Phone`] ?? "").trim();
+        if (!name && !email && !phone) return false;
+      }
+      if (leaderRequired) {
+        const leader = parseInt(String(form["Team Leader"] ?? "").trim() || "0", 10);
+        if (!leader || leader < 1 || leader > requiredTeamSize) return false;
       }
     }
     return true;
@@ -4859,6 +4880,65 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
         }
       )
     ] }, idx)),
+    event && requiredTeamSize > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: Array.from({ length: requiredTeamSize }).map((_, i) => {
+        const idx = i + 1;
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm text-gray-600 mb-1", children: `Member ${idx} Name` }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                className: "p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary",
+                placeholder: `Enter Member ${idx} Name`,
+                value: (form[`Member ${idx} Name`] ?? "").toString(),
+                onChange: (e) => setForm({ ...form, [`Member ${idx} Name`]: e.target.value })
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm text-gray-600 mb-1", children: `Member ${idx} Email` }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                type: "email",
+                className: "p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary",
+                placeholder: `Enter Member ${idx} Email`,
+                value: (form[`Member ${idx} Email`] ?? "").toString(),
+                onChange: (e) => setForm({ ...form, [`Member ${idx} Email`]: e.target.value })
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm text-gray-600 mb-1", children: `Member ${idx} Phone` }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "input",
+              {
+                className: "p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary",
+                placeholder: `Enter Member ${idx} Phone`,
+                value: (form[`Member ${idx} Phone`] ?? "").toString(),
+                onChange: (e) => setForm({ ...form, [`Member ${idx} Phone`]: e.target.value })
+              }
+            )
+          ] })
+        ] }, idx);
+      }) }),
+      leaderRequired && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-3", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium mb-1", children: "Team Leader" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "select",
+          {
+            className: "p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary",
+            value: (form["Team Leader"] ?? "").toString(),
+            onChange: (e) => setForm({ ...form, ["Team Leader"]: e.target.value }),
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: "Select Leader" }),
+              Array.from({ length: requiredTeamSize }).map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: i + 1, children: `Member ${i + 1}` }, i + 1))
+            ]
+          }
+        )
+      ] })
+    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-2 mt-6", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",

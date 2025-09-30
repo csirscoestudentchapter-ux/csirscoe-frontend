@@ -142,10 +142,34 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
     }
   };
 
+  const requiredTeamSize = (() => {
+    const v = String(form['Team Size'] ?? form['Required Team Size'] ?? '').trim();
+    const n = parseInt(v || '0', 10);
+    return Number.isFinite(n) && n > 0 && n <= 10 ? n : 0;
+  })();
+
+  const leaderRequired = (() => {
+    const v = String(form['Leader Required'] ?? '').trim().toLowerCase();
+    return v === 'true' || v === 'yes' || v === '1';
+  })();
+
   const validateForm = () => {
     for (const field of fields) {
       if (field.required && !form[field.label]) {
         return false;
+      }
+    }
+    if (event && requiredTeamSize > 0) {
+      // Require at least name or email/phone per member
+      for (let i = 1; i <= requiredTeamSize; i++) {
+        const name = String(form[`Member ${i} Name`] ?? '').trim();
+        const email = String(form[`Member ${i} Email`] ?? '').trim();
+        const phone = String(form[`Member ${i} Phone`] ?? '').trim();
+        if (!name && !email && !phone) return false;
+      }
+      if (leaderRequired) {
+        const leader = parseInt(String(form['Team Leader'] ?? '').trim() || '0', 10);
+        if (!leader || leader < 1 || leader > requiredTeamSize) return false;
       }
     }
     return true;
@@ -195,7 +219,63 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
           )}
         </div>
       ))}
-      {/* Simplified: no team size dropdown or dynamic member inputs */}
+      {/* Team members based on schema-driven team size/leader flags */}
+      {event && requiredTeamSize > 0 && (
+        <div className="space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {Array.from({ length: requiredTeamSize }).map((_, i) => {
+              const idx = i + 1;
+              return (
+                <div key={idx} className="space-y-2">
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">{`Member ${idx} Name`}</label>
+                    <input
+                      className="p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder={`Enter Member ${idx} Name`}
+                      value={(form[`Member ${idx} Name`] ?? '').toString()}
+                      onChange={e => setForm({ ...form, [`Member ${idx} Name`]: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">{`Member ${idx} Email`}</label>
+                    <input
+                      type="email"
+                      className="p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder={`Enter Member ${idx} Email`}
+                      value={(form[`Member ${idx} Email`] ?? '').toString()}
+                      onChange={e => setForm({ ...form, [`Member ${idx} Email`]: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">{`Member ${idx} Phone`}</label>
+                    <input
+                      className="p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary"
+                      placeholder={`Enter Member ${idx} Phone`}
+                      value={(form[`Member ${idx} Phone`] ?? '').toString()}
+                      onChange={e => setForm({ ...form, [`Member ${idx} Phone`]: e.target.value })}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {leaderRequired && (
+            <div className="mt-3">
+              <label className="block text-sm font-medium mb-1">Team Leader</label>
+              <select
+                className="p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary"
+                value={(form['Team Leader'] ?? '').toString()}
+                onChange={e => setForm({ ...form, ['Team Leader']: e.target.value })}
+              >
+                <option value="">Select Leader</option>
+                {Array.from({ length: requiredTeamSize }).map((_, i) => (
+                  <option key={i+1} value={i+1}>{`Member ${i+1}`}</option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
+      )}
       
       <div className="flex justify-end gap-2 mt-6">
         <button 
