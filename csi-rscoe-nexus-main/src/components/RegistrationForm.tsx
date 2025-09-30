@@ -23,6 +23,12 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
     year: '',
   });
   const [busy, setBusy] = useState(false);
+  const teamSizeValue = (() => {
+    const v = String(form['Team Members'] ?? '').trim();
+    const n = parseInt(v || '1', 10);
+    if (Number.isFinite(n) && n >= 1 && n <= 10) return n;
+    return 1;
+  })();
 
   useEffect(() => {
     if (event) {
@@ -61,6 +67,13 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
     try {
       if (event) {
         // Event registration
+        // Build memberNames from dynamic inputs if Team Members present
+        const members: string[] = [];
+        for (let i = 1; i <= teamSizeValue; i++) {
+          const key = `Member ${i} Name`;
+          const v = (form[key] ?? '').toString().trim();
+          if (v) members.push(v);
+        }
         const customFieldsJson = JSON.stringify(form);
         const payload: Record<string, any> = {
           name: form['Full Name'] || form.name,
@@ -69,6 +82,8 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
           college: form['College'] || form.college,
           year: form['Year'] || form.year,
           department: form['Branch'] || form.branch,
+          teamSize: form['Team Members'] ? teamSizeValue : undefined,
+          memberNames: members.length ? members.join(', ') : (form['Member Names'] || form.memberNames),
           customFieldsJson
         };
         const fd = new FormData();
