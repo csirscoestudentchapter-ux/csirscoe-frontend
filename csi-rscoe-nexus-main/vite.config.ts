@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
@@ -31,5 +31,10 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ['react', 'react-dom'],
+  },
+  test: {
+    environment: "jsdom",
+    globals: true,
+    css: true,
   },
 });

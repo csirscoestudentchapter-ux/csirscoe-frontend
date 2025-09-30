@@ -1,17 +1,8 @@
+/// <reference lib="deno.ns" />
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
-const ALLOWED_ORIGINS = new Set([
-  "https://csirscoe.netlify.app",
-  "https://csi-rscoe-nexus-main.netlify.app",
-  "https://csi-rscoe.vercel.app",
-  "http://localhost:5173",
-]);
-
 serve(async (req) => {
-  const origin = req.headers.get("origin") ?? "";
-  if (!ALLOWED_ORIGINS.has(origin)) {
-    return new Response("Forbidden", { status: 403 });
-  }
+  const origin = req.headers.get("origin") ?? "*";
 
   if (req.method === "OPTIONS") {
     return new Response(null, {
@@ -24,16 +15,19 @@ serve(async (req) => {
   }
 
   if (req.method !== "POST") {
-    return new Response("Method Not Allowed", { status: 405 });
+    return new Response("Method Not Allowed", {
+      status: 405,
+      headers: { "Access-Control-Allow-Origin": origin },
+    });
   }
 
   const { name, email, msg } = await req.json().catch(() => ({}));
   if (!name || !email || !msg) {
-    return new Response("Invalid payload", { status: 400 });
+    return new Response("Invalid payload", { status: 400, headers: { "Access-Control-Allow-Origin": origin } });
   }
 
   const apiKey = Deno.env.get("RESEND_API_KEY");
-  if (!apiKey) return new Response("Missing email config", { status: 500 });
+  if (!apiKey) return new Response("Missing email config", { status: 500, headers: { "Access-Control-Allow-Origin": origin } });
 
   const toRecipients = [
     "bhavsarmayur664@gmail.com",

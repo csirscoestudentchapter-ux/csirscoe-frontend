@@ -35,6 +35,8 @@ const Events: React.FC = () => {
     name: '',
     teamName: '',
     memberNames: '',
+    teamSize: '1',
+    whatsappLink: '',
     email: '',
     phone: '',
     department: '',
@@ -215,8 +217,34 @@ const Events: React.FC = () => {
             }
             return null; 
           })()}
-          {/* Dynamic custom fields loaded from backend schema */}
+          {/* Team settings and custom fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            {/* Team size selector */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-muted-foreground">Number of Team Members</label>
+              <select
+                className="p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input"
+                value={form.teamSize}
+                onChange={e => setForm({ ...form, teamSize: e.target.value })}
+              >
+                <option value="1">Team Members: 1</option>
+                <option value="2">Team Members: 2</option>
+                <option value="3">Team Members: 3</option>
+                <option value="4">Team Members: 4</option>
+                <option value="5">Team Members: 5</option>
+              </select>
+            </div>
+            {/* WhatsApp Group Link (user-provided) */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm text-muted-foreground">WhatsApp Group Link (optional)</label>
+              <input
+                className="p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input"
+                placeholder="https://chat.whatsapp.com/..."
+                value={form.whatsappLink}
+                onChange={e => setForm({ ...form, whatsappLink: e.target.value })}
+              />
+            </div>
+            {/* Dynamic custom fields loaded from backend schema */}
             {customFields.map((field, index) => (
               <div key={index} className={field.type === 'textarea' ? 'md:col-span-2' : ''}>
                 {field.type === 'select' ? (
@@ -258,6 +286,26 @@ const Events: React.FC = () => {
               </div>
             ))}
           </div>
+          {/* Dynamic member name inputs based on team size */}
+          {(() => {
+            const size = Math.max(1, Math.min(5, parseInt(form.teamSize || '1', 10) || 1));
+            const inputs = [] as JSX.Element[];
+            for (let i = 1; i <= size; i++) {
+              const key = `member_${i}`;
+              inputs.push(
+                <div key={key} className="mb-2">
+                  <label className="text-sm text-muted-foreground block mb-1">Member {i} Name</label>
+                  <input
+                    className="p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input"
+                    placeholder={`Enter member ${i} full name`}
+                    value={(form as any)[key] || ''}
+                    onChange={e => setForm({ ...form, [key]: e.target.value })}
+                  />
+                </div>
+              );
+            }
+            return <div className="md:col-span-2">{inputs}</div>;
+          })()}
           {step === 2 && (
             <div className="my-4 p-4 border rounded bg-white flex flex-col items-center justify-center">
               <div className="text-sm mb-3 text-center">Scan to pay</div>
@@ -361,12 +409,19 @@ const Events: React.FC = () => {
                 // Build custom fields payload as a JSON object mapping label -> value
                 const customData: Record<string, string> = {};
                 customFields.forEach(f => { customData[f.label] = form[f.label] || ''; });
-                const payload = { ...form, customFieldsJson: JSON.stringify(customData) };
+                // Build member names array from dynamic inputs
+                const teamSize = Math.max(1, Math.min(5, parseInt(form.teamSize || '1', 10) || 1));
+                const members: string[] = [];
+                for (let i = 1; i <= teamSize; i++) {
+                  const v = (form as any)[`member_${i}`];
+                  if (typeof v === 'string' && v.trim()) members.push(v.trim());
+                }
+                const payload = { ...form, teamSize, memberNames: members.join(', '), whatsappGroupUrl: form.whatsappLink, customFieldsJson: JSON.stringify(customData) };
                 fd.append('payload', new Blob([JSON.stringify(payload)], { type:'application/json' }));
                 const res = await fetch(API_ENDPOINTS.registerForEvent(registerFor.id),{method:'POST',body:fd});
                 if(res.ok){ 
                   alert('Registered successfully');
-                  const wa = registerFor?.whatsappGroupUrl;
+                  const wa = form.whatsappLink || registerFor?.whatsappGroupUrl;
                   if (wa) { window.open(wa, '_blank'); }
                   setRegisterFor(null); setStep(1);
                 }

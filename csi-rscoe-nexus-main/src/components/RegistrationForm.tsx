@@ -112,6 +112,11 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
         if (res.ok) {
           const msg = await res.text();
           alert(msg || 'Registration successful! Welcome to CSI Club!');
+          // Open WhatsApp group link for club registration if configured
+          const whatsappEnv = (import.meta as any).env?.VITE_WHATSAPP_GROUP_URL as string | undefined;
+          if (whatsappEnv && typeof whatsappEnv === 'string') {
+            window.open(whatsappEnv, '_blank');
+          }
           onSuccess && onSuccess();
           onClose();
         } else {
