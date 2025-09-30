@@ -420,9 +420,14 @@ const Events: React.FC = () => {
                 fd.append('payload', new Blob([JSON.stringify(payload)], { type:'application/json' }));
                 const res = await fetch(API_ENDPOINTS.registerForEvent(registerFor.id),{method:'POST',body:fd});
                 if(res.ok){ 
-                  alert('Registered successfully');
                   const wa = form.whatsappLink || registerFor?.whatsappGroupUrl;
-                  if (wa) { window.open(wa, '_blank'); }
+                  if (wa) {
+                    if (confirm('Registration successful! Do you want to join the WhatsApp group now?')) {
+                      window.open(wa, '_blank');
+                    }
+                  } else {
+                    alert('Registration successful');
+                  }
                   setRegisterFor(null); setStep(1);
                 }
                 else if (res.status === 409) { alert('Duplicate found: team/email/phone/transaction already registered'); }

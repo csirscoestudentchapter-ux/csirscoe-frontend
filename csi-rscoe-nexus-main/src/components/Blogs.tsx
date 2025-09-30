@@ -220,7 +220,7 @@ const Blogs: React.FC = () => {
           </div>
         ) : (
           <div className="col-span-full text-center text-xl text-muted-foreground font-medium py-12">
-            Blogs are brewing! Check back soon for fresh tech insights.
+            Tech news is brewing! Check back soon for fresh updates.
           </div>
         )}
 
