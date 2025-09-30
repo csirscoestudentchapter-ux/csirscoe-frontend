@@ -1059,6 +1059,8 @@ const Events = () => {
     name: "",
     teamName: "",
     memberNames: "",
+    teamSize: "1",
+    whatsappLink: "",
     email: "",
     phone: "",
     department: "",
@@ -1209,45 +1211,103 @@ const Events = () => {
         }
         return null;
       })(),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 mb-4", children: customFields.map((field, index) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: field.type === "textarea" ? "md:col-span-2" : "", children: field.type === "select" ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        "select",
-        {
-          className: "p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input",
-          value: form[field.label] || "",
-          onChange: (e) => setForm({ ...form, [field.label]: e.target.value }),
-          required: field.required,
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: field.label }),
-            (field.options || "").split(",").map((opt) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.trim(), children: opt.trim() }, opt))
-          ]
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 mb-4", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-sm text-muted-foreground", children: "Number of Team Members" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(
+            "select",
+            {
+              className: "p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input",
+              value: form.teamSize,
+              onChange: (e) => setForm({ ...form, teamSize: e.target.value }),
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "1", children: "Team Members: 1" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "2", children: "Team Members: 2" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "3", children: "Team Members: 3" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "4", children: "Team Members: 4" }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "5", children: "Team Members: 5" })
+              ]
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col gap-1", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-sm text-muted-foreground", children: "WhatsApp Group Link (optional)" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              className: "p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input",
+              placeholder: "https://chat.whatsapp.com/...",
+              value: form.whatsappLink,
+              onChange: (e) => setForm({ ...form, whatsappLink: e.target.value })
+            }
+          )
+        ] }),
+        customFields.map((field, index) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: field.type === "textarea" ? "md:col-span-2" : "", children: field.type === "select" ? /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "select",
+          {
+            className: "p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input",
+            value: form[field.label] || "",
+            onChange: (e) => setForm({ ...form, [field.label]: e.target.value }),
+            required: field.required,
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "", children: field.label }),
+              (field.options || "").split(",").map((opt) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: opt.trim(), children: opt.trim() }, opt))
+            ]
+          }
+        ) : field.type === "textarea" ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "textarea",
+          {
+            className: "p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input",
+            placeholder: field.label,
+            value: form[field.label] || "",
+            onChange: (e) => setForm({ ...form, [field.label]: e.target.value }),
+            required: field.required
+          }
+        ) : field.type === "display" ? /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            className: "p-2 border rounded w-full opacity-70 bg-background text-foreground placeholder:text-muted-foreground border-input",
+            placeholder: field.label,
+            value: form[field.label] || "",
+            readOnly: true
+          }
+        ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            className: "p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input",
+            placeholder: field.label,
+            value: form[field.label] || "",
+            onChange: (e) => setForm({ ...form, [field.label]: e.target.value }),
+            required: field.required
+          }
+        ) }, index))
+      ] }),
+      (() => {
+        const size = Math.max(1, Math.min(5, parseInt(form.teamSize || "1", 10) || 1));
+        const inputs = [];
+        for (let i = 1; i <= size; i++) {
+          const key = `member_${i}`;
+          inputs.push(
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-2", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("label", { className: "text-sm text-muted-foreground block mb-1", children: [
+                "Member ",
+                i,
+                " Name"
+              ] }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx(
+                "input",
+                {
+                  className: "p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input",
+                  placeholder: `Enter member ${i} full name`,
+                  value: form[key] || "",
+                  onChange: (e) => setForm({ ...form, [key]: e.target.value })
+                }
+              )
+            ] }, key)
+          );
         }
-      ) : field.type === "textarea" ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "textarea",
-        {
-          className: "p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input",
-          placeholder: field.label,
-          value: form[field.label] || "",
-          onChange: (e) => setForm({ ...form, [field.label]: e.target.value }),
-          required: field.required
-        }
-      ) : field.type === "display" ? /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "input",
-        {
-          className: "p-2 border rounded w-full opacity-70 bg-background text-foreground placeholder:text-muted-foreground border-input",
-          placeholder: field.label,
-          value: form[field.label] || "",
-          readOnly: true
-        }
-      ) : /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "input",
-        {
-          className: "p-2 border rounded w-full bg-background text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:border-primary border-input",
-          placeholder: field.label,
-          value: form[field.label] || "",
-          onChange: (e) => setForm({ ...form, [field.label]: e.target.value }),
-          required: field.required
-        }
-      ) }, index)) }),
+        return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "md:col-span-2", children: inputs });
+      })(),
       step === 2 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "my-4 p-4 border rounded bg-white flex flex-col items-center justify-center", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-sm mb-3 text-center", children: "Scan to pay" }),
         (registerFor == null ? void 0 : registerFor.qrUrl) ? /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
@@ -1371,14 +1431,23 @@ const Events = () => {
             customFields.forEach((f) => {
               customData[f.label] = form[f.label] || "";
             });
-            const payload = { ...form, customFieldsJson: JSON.stringify(customData) };
+            const teamSize = Math.max(1, Math.min(5, parseInt(form.teamSize || "1", 10) || 1));
+            const members = [];
+            for (let i = 1; i <= teamSize; i++) {
+              const v = form[`member_${i}`];
+              if (typeof v === "string" && v.trim()) members.push(v.trim());
+            }
+            const payload = { ...form, teamSize, memberNames: members.join(", "), whatsappGroupUrl: form.whatsappLink, customFieldsJson: JSON.stringify(customData) };
             fd.append("payload", new Blob([JSON.stringify(payload)], { type: "application/json" }));
             const res = await fetch(API_ENDPOINTS.registerForEvent(registerFor.id), { method: "POST", body: fd });
             if (res.ok) {
-              alert("Registered successfully");
-              const wa = registerFor == null ? void 0 : registerFor.whatsappGroupUrl;
+              const wa = form.whatsappLink || (registerFor == null ? void 0 : registerFor.whatsappGroupUrl);
               if (wa) {
-                window.open(wa, "_blank");
+                if (confirm("Registration successful! Do you want to join the WhatsApp group now?")) {
+                  window.open(wa, "_blank");
+                }
+              } else {
+                alert("Registration successful");
               }
               setRegisterFor(null);
               setStep(1);
@@ -1983,7 +2052,7 @@ const Blogs = () => {
           children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "text-4xl md:text-5xl font-playfair font-bold text-foreground mb-6", children: [
               "Latest ",
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent", children: "Blogs" })
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent", children: "Tech News" })
             ] }),
             /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto", children: "Stay updated with the latest trends, tutorials, and insights from our tech community" })
           ]
@@ -2043,7 +2112,7 @@ const Blogs = () => {
           ] })
         },
         post.id
-      )) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "col-span-full text-center text-xl text-muted-foreground font-medium py-12", children: "Blogs are brewing! Check back soon for fresh tech insights." })
+      )) }) : /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "col-span-full text-center text-xl text-muted-foreground font-medium py-12", children: "Tech news is brewing! Check back soon for fresh updates." })
     ] }),
     fullScaleImage && /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
@@ -4413,6 +4482,12 @@ const AdminDashboard = ({ user, onLogout }) => {
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
           /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-sm font-medium", children: "Registration Fields" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex flex-wrap gap-2", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Button, { type: "button", variant: "outline", onClick: () => {
+            setCustomFields([
+              ...customFields,
+              { label: "Team Members", type: "select", required: true, options: "1,2,3,4,5" }
+            ]);
+          }, children: "Add Team Members dropdown" }) }),
           customFields.map((field, index) => /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-end gap-2 border p-2 rounded", children: [
             /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex-grow space-y-1", children: [
               /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm", children: "Field Label" }),
@@ -4592,6 +4667,7 @@ const Dashboard = () => {
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(AdminDashboard, { user, onLogout: handleLogout });
 };
+const __vite_import_meta_env__ = { "BASE_URL": "/", "DEV": false, "MODE": "production", "PROD": true, "SSR": false, "VITE_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6bW5zcmFua2JwcW51YXhveWhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwODEyNDMsImV4cCI6MjA3NDY1NzI0M30.ZSHZPfiQNvXy-fAmcpePq_oYATpaIy4bQeJMKvG6u38", "VITE_SUPABASE_URL": "https://qzmnsrankbpqnuaxoyhp.supabase.co" };
 const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => {
   useAuth();
   const [fields, setFields] = reactExports.useState([]);
@@ -4604,6 +4680,12 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
     year: ""
   });
   const [busy, setBusy] = reactExports.useState(false);
+  const teamSizeValue = (() => {
+    const v = String(form["Team Members"] ?? "").trim();
+    const n = parseInt(v || "1", 10);
+    if (Number.isFinite(n) && n >= 1 && n <= 10) return n;
+    return 1;
+  })();
   reactExports.useEffect(() => {
     if (event) {
       const load = async () => {
@@ -4639,6 +4721,12 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
     setBusy(true);
     try {
       if (event) {
+        const members = [];
+        for (let i = 1; i <= teamSizeValue; i++) {
+          const key = `Member ${i} Name`;
+          const v = (form[key] ?? "").toString().trim();
+          if (v) members.push(v);
+        }
         const customFieldsJson = JSON.stringify(form);
         const payload = {
           name: form["Full Name"] || form.name,
@@ -4647,6 +4735,8 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
           college: form["College"] || form.college,
           year: form["Year"] || form.year,
           department: form["Branch"] || form.branch,
+          teamSize: form["Team Members"] ? teamSizeValue : void 0,
+          memberNames: members.length ? members.join(", ") : form["Member Names"] || form.memberNames,
           customFieldsJson
         };
         const fd = new FormData();
@@ -4686,6 +4776,10 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
         if (res.ok) {
           const msg = await res.text();
           alert(msg || "Registration successful! Welcome to CSI Club!");
+          const whatsappEnv = __vite_import_meta_env__ == null ? void 0 : __vite_import_meta_env__.VITE_WHATSAPP_GROUP_URL;
+          if (whatsappEnv && typeof whatsappEnv === "string") {
+            window.open(whatsappEnv, "_blank");
+          }
           onSuccess && onSuccess();
           onClose();
         } else {
@@ -4753,6 +4847,35 @@ const RegistrationForm = ({ event, onClose, onSuccess, standalone = false }) => 
         }
       )
     ] }, idx)),
+    event && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-2", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm font-medium mb-1", children: "Team Members" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "select",
+          {
+            className: "p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary",
+            value: (form["Team Members"] ?? "").toString(),
+            onChange: (e) => setForm({ ...form, ["Team Members"]: e.target.value }),
+            children: Array.from({ length: 10 }).map((_, i) => /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: i + 1, children: i + 1 }, i + 1))
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "grid grid-cols-1 sm:grid-cols-2 gap-3", children: Array.from({ length: teamSizeValue }).map((_, i) => {
+        const key = `Member ${i + 1} Name`;
+        return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "block text-sm text-gray-600 mb-1", children: key }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            "input",
+            {
+              className: "p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary",
+              placeholder: `Enter ${key}`,
+              value: (form[key] ?? "").toString(),
+              onChange: (e) => setForm({ ...form, [key]: e.target.value })
+            }
+          )
+        ] }, key);
+      }) })
+    ] }),
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-end gap-2 mt-6", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
