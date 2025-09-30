@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { API_ENDPOINTS } from '@/config/api';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 type CustomField = { label: string; type: string; required: boolean; options?: string };
 
@@ -23,6 +24,8 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
     year: '',
   });
   const [busy, setBusy] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [whatsappLink, setWhatsappLink] = useState<string | undefined>(undefined);
   const teamSizeValue = (() => {
     const v = String(form['Team Members'] ?? '').trim();
     const n = parseInt(v || '1', 10);
@@ -91,11 +94,9 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
         const res = await fetch(API_ENDPOINTS.registerForEvent(event.id), { method: 'POST', body: fd });
         if (res.ok) { 
           onSuccess && onSuccess(); 
-          const whatsapp = (form['WhatsApp Group URL'] || form.whatsappGroupUrl);
-          if (whatsapp && typeof whatsapp === 'string') {
-            window.open(whatsapp, '_blank');
-          }
-          onClose(); 
+          const whatsapp = (form['WhatsApp Group URL'] || form.whatsappGroupUrl) as string | undefined;
+          setWhatsappLink(whatsapp);
+          setSuccessOpen(true);
         }
         else {
           if (res.status === 409) {
@@ -127,13 +128,10 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
         if (res.ok) {
           const msg = await res.text();
           alert(msg || 'Registration successful! Welcome to CSI Club!');
-          // Open WhatsApp group link for club registration if configured
           const whatsappEnv = (import.meta as any).env?.VITE_WHATSAPP_GROUP_URL as string | undefined;
-          if (whatsappEnv && typeof whatsappEnv === 'string') {
-            window.open(whatsappEnv, '_blank');
-          }
+          setWhatsappLink(whatsappEnv);
           onSuccess && onSuccess();
-          onClose();
+          setSuccessOpen(true);
         } else {
           const t = await res.text();
           alert(t || 'Failed to register for club');
@@ -197,39 +195,7 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
           )}
         </div>
       ))}
-      {/* Team members count + dynamic inputs (visible UI) */}
-      {event && (
-        <div className="space-y-2">
-          <div>
-            <label className="block text-sm font-medium mb-1">Team Members</label>
-            <select
-              className="p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary"
-              value={(form['Team Members'] ?? '').toString()}
-              onChange={e => setForm({ ...form, ['Team Members']: e.target.value })}
-            >
-              {Array.from({ length: 10 }).map((_, i) => (
-                <option key={i+1} value={i+1}>{i+1}</option>
-              ))}
-            </select>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {Array.from({ length: teamSizeValue }).map((_, i) => {
-              const key = `Member ${i+1} Name`;
-              return (
-                <div key={key}>
-                  <label className="block text-sm text-gray-600 mb-1">{key}</label>
-                  <input
-                    className="p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary"
-                    placeholder={`Enter ${key}`}
-                    value={(form[key] ?? '').toString()}
-                    onChange={e => setForm({ ...form, [key]: e.target.value })}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+      {/* Simplified: no team size dropdown or dynamic member inputs */}
       
       <div className="flex justify-end gap-2 mt-6">
         <button 
@@ -246,6 +212,45 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
           {busy ? 'Processing...' : 'Register'}
         </button>
       </div>
+
+      <Dialog open={successOpen} onOpenChange={(open) => {
+        setSuccessOpen(open);
+        if (!open) {
+          onClose();
+        }
+      }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Registration Successful</DialogTitle>
+            <DialogDescription>
+              You have been registered successfully.
+            </DialogDescription>
+          </DialogHeader>
+          {whatsappLink ? (
+            <div className="space-y-3">
+              <p className="text-sm">Join the WhatsApp group for further updates:</p>
+              <a
+                href={whatsappLink}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
+              >
+                Open WhatsApp Group
+              </a>
+            </div>
+          ) : (
+            <p className="text-sm">No WhatsApp link provided.</p>
+          )}
+          <DialogFooter>
+            <button
+              className="px-4 py-2 rounded border hover:bg-gray-100 transition-colors"
+              onClick={() => setSuccessOpen(false)}
+            >
+              Close
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
