@@ -197,6 +197,39 @@ const RegistrationForm: React.FC<Props> = ({ event, onClose, onSuccess, standalo
           )}
         </div>
       ))}
+      {/* Team members count + dynamic inputs (visible UI) */}
+      {event && (
+        <div className="space-y-2">
+          <div>
+            <label className="block text-sm font-medium mb-1">Team Members</label>
+            <select
+              className="p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary"
+              value={(form['Team Members'] ?? '').toString()}
+              onChange={e => setForm({ ...form, ['Team Members']: e.target.value })}
+            >
+              {Array.from({ length: 10 }).map((_, i) => (
+                <option key={i+1} value={i+1}>{i+1}</option>
+              ))}
+            </select>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {Array.from({ length: teamSizeValue }).map((_, i) => {
+              const key = `Member ${i+1} Name`;
+              return (
+                <div key={key}>
+                  <label className="block text-sm text-gray-600 mb-1">{key}</label>
+                  <input
+                    className="p-2 border rounded w-full focus:ring-2 focus:ring-primary focus:border-primary"
+                    placeholder={`Enter ${key}`}
+                    value={(form[key] ?? '').toString()}
+                    onChange={e => setForm({ ...form, [key]: e.target.value })}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
       
       <div className="flex justify-end gap-2 mt-6">
         <button 
