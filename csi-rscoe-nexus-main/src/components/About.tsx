@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Code, Users, Trophy, Rocket } from 'lucide-react';
+import { Code, Users, Trophy, Rocket, Target, Eye, ListChecks, Sparkles } from 'lucide-react';
 const About: React.FC = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
@@ -92,31 +92,80 @@ const About: React.FC = () => {
         y: 50
       }} transition={{
         duration: 0.8,
-        delay: 0.6
-      }} className="text-center">
-          <div className="gradient-card p-8 md:p-12 rounded-2xl max-w-4xl mx-auto">
-            <h3 className="text-3xl md:text-4xl font-playfair font-bold text-foreground mb-6">
-              Our Mission
-            </h3>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-6">To bridge the gap between academic knowledge and industry needs by conducting workshops, seminars, and hands-on sessions on emerging technologies.
-
-
-To cultivate problem-solving, leadership, and team-building skills through participation in technical competitions, hackathons, and collaborative projects.
-
-
-To promote research and innovation by encouraging students to explore real-world challenges and contribute to impactful technological solutions.
-
-
-To create an inclusive and vibrant technical community that nurtures talent, embraces diversity, and promotes ethical practices in computing.
-
-
-To establish collaborations with industry professionals and CSI National Body to provide students with exposure, mentorship, and career opportunities.</p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <span className="px-4 py-2 bg-primary/10 text-primary rounded-full font-medium">Innovation</span>
-              <span className="px-4 py-2 bg-primary/10 text-primary rounded-full font-medium">Excellence</span>
-              <span className="px-4 py-2 bg-primary/10 text-primary rounded-full font-medium">Collaboration</span>
-              <span className="px-4 py-2 bg-primary/10 text-primary rounded-full font-medium">Growth</span>
+        delay: 0.4
+      }} className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Aim */}
+          <div className="gradient-card p-8 rounded-2xl h-full">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
+                <Target className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <h3 className="text-2xl md:text-3xl font-playfair font-bold text-foreground">Chapter Aim</h3>
             </div>
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">The aim of the chapter is to foster an environment where students in the department can efficiently develop and utilize the latest technologies in the IT field, enhancing their career prospects and contributing to society.</p>
+          </div>
+
+          {/* Vision */}
+          <div className="gradient-card p-8 rounded-2xl h-full">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-secondary to-primary-glow rounded-lg flex items-center justify-center">
+                <Eye className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <h3 className="text-2xl md:text-3xl font-playfair font-bold text-foreground">Chapter Vision</h3>
+            </div>
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">To promote research, encourage knowledge sharing, support continuous learning, and enhance career development for all students in the department.</p>
+          </div>
+
+          {/* Mission */}
+          <div className="gradient-card p-8 rounded-2xl">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <h3 className="text-2xl md:text-3xl font-playfair font-bold text-foreground">Chapter Mission</h3>
+            </div>
+            <ul className="space-y-3 text-muted-foreground text-base md:text-lg">
+              <li className="flex gap-3">
+                <span className="mt-1 inline-block h-2 w-2 rounded-full bg-primary" />
+                Organize seminars, workshops, and expert lectures to raise awareness about recent industrial trends.
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1 inline-block h-2 w-2 rounded-full bg-primary" />
+                Arrange various competitions and encourage students to demonstrate their skillsets.
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1 inline-block h-2 w-2 rounded-full bg-primary" />
+                Inspire and support new industry entrants, helping them integrate into the IT community.
+              </li>
+            </ul>
+          </div>
+
+          {/* Objectives */}
+          <div className="gradient-card p-8 rounded-2xl">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-secondary to-primary-glow rounded-lg flex items-center justify-center">
+                <ListChecks className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <h3 className="text-2xl md:text-3xl font-playfair font-bold text-foreground">Chapter Objectives</h3>
+            </div>
+            <ul className="space-y-3 text-muted-foreground text-base md:text-lg">
+              <li className="flex gap-3">
+                <span className="mt-1 inline-block h-2 w-2 rounded-full bg-primary" />
+                Provide exposure to industry professionals to help shape career paths.
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1 inline-block h-2 w-2 rounded-full bg-primary" />
+                Complement technical reviews with the latest technologies.
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1 inline-block h-2 w-2 rounded-full bg-primary" />
+                Offer certification and training programs at discounted rates.
+              </li>
+              <li className="flex gap-3">
+                <span className="mt-1 inline-block h-2 w-2 rounded-full bg-primary" />
+                Present an excellent opportunity for nomination as the Best Student Paper in CSI Communications.
+              </li>
+            </ul>
           </div>
         </motion.div>
       </div>

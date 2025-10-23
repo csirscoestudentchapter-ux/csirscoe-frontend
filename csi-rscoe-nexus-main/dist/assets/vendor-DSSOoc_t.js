@@ -8685,6 +8685,22 @@ const ExternalLink = createLucideIcon("ExternalLink", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const Eye = createLucideIcon("Eye", [
+  [
+    "path",
+    {
+      d: "M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0",
+      key: "1nclc0"
+    }
+  ],
+  ["circle", { cx: "12", cy: "12", r: "3", key: "1v7zrd" }]
+]);
+/**
+ * @license lucide-react v0.462.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const FileText = createLucideIcon("FileText", [
   ["path", { d: "M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z", key: "1rqfz7" }],
   ["path", { d: "M14 2v4a2 2 0 0 0 2 2h4", key: "tnqrlb" }],
@@ -8735,6 +8751,19 @@ const Linkedin = createLucideIcon("Linkedin", [
   ],
   ["rect", { width: "4", height: "12", x: "2", y: "9", key: "mk3on5" }],
   ["circle", { cx: "4", cy: "4", r: "2", key: "bt5ra8" }]
+]);
+/**
+ * @license lucide-react v0.462.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const ListChecks = createLucideIcon("ListChecks", [
+  ["path", { d: "m3 17 2 2 4-4", key: "1jhpwq" }],
+  ["path", { d: "m3 7 2 2 4-4", key: "1obspn" }],
+  ["path", { d: "M13 6h8", key: "15sg57" }],
+  ["path", { d: "M13 12h8", key: "h98zly" }],
+  ["path", { d: "M13 18h8", key: "oe0vm4" }]
 ]);
 /**
  * @license lucide-react v0.462.0 - ISC
@@ -8911,6 +8940,25 @@ const Settings = createLucideIcon("Settings", [
  * This source code is licensed under the ISC license.
  * See the LICENSE file in the root directory of this source tree.
  */
+const Sparkles = createLucideIcon("Sparkles", [
+  [
+    "path",
+    {
+      d: "M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z",
+      key: "4pj2yx"
+    }
+  ],
+  ["path", { d: "M20 3v4", key: "1olli1" }],
+  ["path", { d: "M22 5h-4", key: "1gvqau" }],
+  ["path", { d: "M4 17v2", key: "vumght" }],
+  ["path", { d: "M5 18H3", key: "zchphs" }]
+]);
+/**
+ * @license lucide-react v0.462.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
 const SquarePen = createLucideIcon("SquarePen", [
   ["path", { d: "M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7", key: "1m0v6g" }],
   [
@@ -8920,6 +8968,17 @@ const SquarePen = createLucideIcon("SquarePen", [
       key: "ohrbg2"
     }
   ]
+]);
+/**
+ * @license lucide-react v0.462.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+const Target = createLucideIcon("Target", [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["circle", { cx: "12", cy: "12", r: "6", key: "1vlfrh" }],
+  ["circle", { cx: "12", cy: "12", r: "2", key: "1c9p78" }]
 ]);
 /**
  * @license lucide-react v0.462.0 - ISC
@@ -35476,11 +35535,11 @@ var SideCar$1 = function(_a2) {
   if (!sideCar) {
     throw new Error("Sidecar: please provide `sideCar` property to import the right car");
   }
-  var Target = sideCar.read();
-  if (!Target) {
+  var Target2 = sideCar.read();
+  if (!Target2) {
     throw new Error("Sidecar medium not found");
   }
-  return reactExports.createElement(Target, __assign({}, rest));
+  return reactExports.createElement(Target2, __assign({}, rest));
 };
 SideCar$1.isSideCarExport = true;
 function exportSidecar(medium, exported) {
@@ -36368,58 +36427,62 @@ var Close = DialogClose;
 export {
   $e as $,
   Action$1 as A,
-  ChevronRight as B,
+  User as B,
   Close$1 as C,
   Description$1 as D,
-  Linkedin as E,
-  Mail as F,
-  createClient as G,
-  Send as H,
-  Phone as I,
-  MessageSquare as J,
-  Content as K,
+  Eye as E,
+  Award as F,
+  ChevronLeft as G,
+  ChevronRight as H,
+  Linkedin as I,
+  Mail as J,
+  createClient as K,
   LogIn as L,
   Menu as M,
-  Close as N,
-  Overlay as O,
+  Send as N,
+  Phone as O,
   Provider$1 as P,
-  Title as Q,
+  MessageSquare as Q,
   Root2 as R,
   Slot$1 as S,
   Title$1 as T,
   Users as U,
   Viewport as V,
-  Description as W,
+  Overlay as W,
   X,
-  Portal as Y,
+  Content as Y,
   ZoomIn as Z,
-  Root as _,
+  Close as _,
   cva as a,
-  Lock as a0,
-  ExternalLink as a1,
-  Instagram as a2,
-  Github as a3,
-  useNavigate as a4,
-  useParams as a5,
-  React as a6,
-  Upload as a7,
-  LogOut as a8,
-  ChartColumn as a9,
-  Megaphone as aa,
-  FileText as ab,
-  UserPlus as ac,
-  Settings as ad,
-  Activity as ae,
-  Plus as af,
-  SquarePen as ag,
-  Trash2 as ah,
-  useLocation as ai,
-  QueryClient as aj,
-  QueryClientProvider as ak,
-  BrowserRouter as al,
-  Routes as am,
-  Route as an,
-  createRoot as ao,
+  Title as a0,
+  Description as a1,
+  Portal as a2,
+  Root as a3,
+  Lock as a4,
+  ExternalLink as a5,
+  Instagram as a6,
+  Github as a7,
+  useNavigate as a8,
+  useParams as a9,
+  React as aa,
+  Upload as ab,
+  LogOut as ac,
+  ChartColumn as ad,
+  Megaphone as ae,
+  FileText as af,
+  UserPlus as ag,
+  Settings as ah,
+  Activity as ai,
+  Plus as aj,
+  SquarePen as ak,
+  Trash2 as al,
+  useLocation as am,
+  QueryClient as an,
+  QueryClientProvider as ao,
+  BrowserRouter as ap,
+  Routes as aq,
+  Route as ar,
+  createRoot as as,
   j as b,
   clsx as c,
   Content2 as d,
@@ -36429,20 +36492,20 @@ export {
   ArrowDown as h,
   useInView as i,
   jsxRuntimeExports as j,
-  Code as k,
-  Trophy as l,
+  Target as k,
+  Sparkles as l,
   motion as m,
-  Rocket as n,
-  useEmblaCarousel as o,
-  ArrowLeft as p,
-  ArrowRight as q,
+  ListChecks as n,
+  Code as o,
+  Trophy as p,
+  Rocket as q,
   reactExports as r,
-  Calendar as s,
+  useEmblaCarousel as s,
   twMerge as t,
   useScroll as u,
-  MapPin as v,
-  Clock as w,
-  User as x,
-  Award as y,
-  ChevronLeft as z
+  ArrowLeft as v,
+  ArrowRight as w,
+  Calendar as x,
+  MapPin as y,
+  Clock as z
 };

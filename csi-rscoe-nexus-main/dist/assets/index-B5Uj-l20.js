@@ -1,4 +1,4 @@
-import { r as reactExports, t as twMerge, c as clsx, j as jsxRuntimeExports, V as Viewport, R as Root2, A as Action, C as Close, X, T as Title, D as Description, a as cva, P as Provider, b as j, $ as $e, d as Content2, e as Provider$1, S as Slot, m as motion, L as LogIn, M as Menu, f as AnimatePresence, u as useScroll, g as useTransform, h as ArrowDown, i as useInView, k as Code, U as Users, l as Trophy, n as Rocket, o as useEmblaCarousel, p as ArrowLeft, q as ArrowRight, s as Calendar, v as MapPin, w as Clock, x as User, y as Award, z as ChevronLeft, B as ChevronRight, E as Linkedin, F as Mail, Z as ZoomIn, G as createClient, H as Send, I as Phone, J as MessageSquare, O as Overlay, K as Content, N as Close$1, Q as Title$1, W as Description$1, Y as Portal, _ as Root, a0 as Lock, a1 as ExternalLink, a2 as Instagram, a3 as Github, a4 as useNavigate, a5 as useParams, a6 as React, a7 as Upload, a8 as LogOut, a9 as ChartColumn, aa as Megaphone, ab as FileText, ac as UserPlus, ad as Settings, ae as Activity, af as Plus, ag as SquarePen, ah as Trash2, ai as useLocation, aj as QueryClient, ak as QueryClientProvider, al as BrowserRouter, am as Routes, an as Route, ao as createRoot } from "./vendor-Coh1S776.js";
+import { r as reactExports, t as twMerge, c as clsx, j as jsxRuntimeExports, V as Viewport, R as Root2, A as Action, C as Close, X, T as Title, D as Description, a as cva, P as Provider, b as j, $ as $e, d as Content2, e as Provider$1, S as Slot, m as motion, L as LogIn, M as Menu, f as AnimatePresence, u as useScroll, g as useTransform, h as ArrowDown, i as useInView, k as Target, E as Eye, l as Sparkles, n as ListChecks, o as Code, U as Users, p as Trophy, q as Rocket, s as useEmblaCarousel, v as ArrowLeft, w as ArrowRight, x as Calendar, y as MapPin, z as Clock, B as User, F as Award, G as ChevronLeft, H as ChevronRight, I as Linkedin, J as Mail, Z as ZoomIn, K as createClient, N as Send, O as Phone, Q as MessageSquare, W as Overlay, Y as Content, _ as Close$1, a0 as Title$1, a1 as Description$1, a2 as Portal, a3 as Root, a4 as Lock, a5 as ExternalLink, a6 as Instagram, a7 as Github, a8 as useNavigate, a9 as useParams, aa as React, ab as Upload, ac as LogOut, ad as ChartColumn, ae as Megaphone, af as FileText, ag as UserPlus, ah as Settings, ai as Activity, aj as Plus, ak as SquarePen, al as Trash2, am as useLocation, an as QueryClient, ao as QueryClientProvider, ap as BrowserRouter, aq as Routes, ar as Route, as as createRoot } from "./vendor-DSSOoc_t.js";
 (function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -752,7 +752,7 @@ const About = () => {
         /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-xl font-playfair font-semibold text-foreground mb-3", children: feature.title }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-sm leading-relaxed", children: feature.description })
       ] }) }, feature.title)) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(motion.div, { initial: {
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(motion.div, { initial: {
         opacity: 0,
         y: 50
       }, animate: isInView ? {
@@ -763,17 +763,67 @@ const About = () => {
         y: 50
       }, transition: {
         duration: 0.8,
-        delay: 0.6
-      }, className: "text-center", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "gradient-card p-8 md:p-12 rounded-2xl max-w-4xl mx-auto", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-3xl md:text-4xl font-playfair font-bold text-foreground mb-6", children: "Our Mission" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-lg text-muted-foreground leading-relaxed mb-6", children: "To bridge the gap between academic knowledge and industry needs by conducting workshops, seminars, and hands-on sessions on emerging technologies. To cultivate problem-solving, leadership, and team-building skills through participation in technical competitions, hackathons, and collaborative projects. To promote research and innovation by encouraging students to explore real-world challenges and contribute to impactful technological solutions. To create an inclusive and vibrant technical community that nurtures talent, embraces diversity, and promotes ethical practices in computing. To establish collaborations with industry professionals and CSI National Body to provide students with exposure, mentorship, and career opportunities." }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-wrap justify-center gap-4 text-sm", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "px-4 py-2 bg-primary/10 text-primary rounded-full font-medium", children: "Innovation" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "px-4 py-2 bg-primary/10 text-primary rounded-full font-medium", children: "Excellence" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "px-4 py-2 bg-primary/10 text-primary rounded-full font-medium", children: "Collaboration" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "px-4 py-2 bg-primary/10 text-primary rounded-full font-medium", children: "Growth" })
+        delay: 0.4
+      }, className: "grid grid-cols-1 lg:grid-cols-2 gap-8", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "gradient-card p-8 rounded-2xl h-full", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4 mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Target, { className: "w-6 h-6 text-primary-foreground" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-2xl md:text-3xl font-playfair font-bold text-foreground", children: "Chapter Aim" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-base md:text-lg leading-relaxed", children: "The aim of the chapter is to foster an environment where students in the department can efficiently develop and utilize the latest technologies in the IT field, enhancing their career prospects and contributing to society." })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "gradient-card p-8 rounded-2xl h-full", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4 mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 bg-gradient-to-br from-secondary to-primary-glow rounded-lg flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Eye, { className: "w-6 h-6 text-primary-foreground" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-2xl md:text-3xl font-playfair font-bold text-foreground", children: "Chapter Vision" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-muted-foreground text-base md:text-lg leading-relaxed", children: "To promote research, encourage knowledge sharing, support continuous learning, and enhance career development for all students in the department." })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "gradient-card p-8 rounded-2xl", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4 mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 bg-gradient-to-br from-primary to-primary-glow rounded-lg flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(Sparkles, { className: "w-6 h-6 text-primary-foreground" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-2xl md:text-3xl font-playfair font-bold text-foreground", children: "Chapter Mission" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "space-y-3 text-muted-foreground text-base md:text-lg", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mt-1 inline-block h-2 w-2 rounded-full bg-primary" }),
+              "Organize seminars, workshops, and expert lectures to raise awareness about recent industrial trends."
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mt-1 inline-block h-2 w-2 rounded-full bg-primary" }),
+              "Arrange various competitions and encourage students to demonstrate their skillsets."
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mt-1 inline-block h-2 w-2 rounded-full bg-primary" }),
+              "Inspire and support new industry entrants, helping them integrate into the IT community."
+            ] })
+          ] })
+        ] }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "gradient-card p-8 rounded-2xl", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-start gap-4 mb-4", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-12 h-12 bg-gradient-to-br from-secondary to-primary-glow rounded-lg flex items-center justify-center", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ListChecks, { className: "w-6 h-6 text-primary-foreground" }) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-2xl md:text-3xl font-playfair font-bold text-foreground", children: "Chapter Objectives" })
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("ul", { className: "space-y-3 text-muted-foreground text-base md:text-lg", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mt-1 inline-block h-2 w-2 rounded-full bg-primary" }),
+              "Provide exposure to industry professionals to help shape career paths."
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mt-1 inline-block h-2 w-2 rounded-full bg-primary" }),
+              "Complement technical reviews with the latest technologies."
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mt-1 inline-block h-2 w-2 rounded-full bg-primary" }),
+              "Offer certification and training programs at discounted rates."
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("li", { className: "flex gap-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "mt-1 inline-block h-2 w-2 rounded-full bg-primary" }),
+              "Present an excellent opportunity for nomination as the Best Student Paper in CSI Communications."
+            ] })
+          ] })
         ] })
-      ] }) })
+      ] })
     ] })
   ] });
 };
